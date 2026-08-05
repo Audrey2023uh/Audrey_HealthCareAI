@@ -1100,6 +1100,33 @@ DIABETES_UI_TO_CODE = {
     "Type 2 Diabetes": "type2",
 }
 
+SEX_UI_TO_CODE = {
+    "Unknown": None,
+    "Female": "female",
+    "Male": "male",
+    "Other": "other",
+}
+
+# Meaningful BP categories → representative systolic values for existing pipeline fields
+SBP_UI_TO_VALUE = {
+    "Unknown": None,
+    "Normal (<120 mm Hg)": 110,
+    "Elevated (120–129 mm Hg)": 125,
+    "High — Stage 1 (130–139 mm Hg)": 135,
+    "High — Stage 2 (140–179 mm Hg)": 150,
+    "Critical / Hypertensive crisis (≥180 mm Hg)": 190,
+}
+
+# Meaningful LDL categories → representative values for existing pipeline fields
+LDL_UI_TO_VALUE = {
+    "Unknown": None,
+    "Optimal (<100 mg/dL)": 90,
+    "Near optimal (100–129 mg/dL)": 115,
+    "Borderline high (130–159 mg/dL)": 145,
+    "High (160–189 mg/dL)": 175,
+    "Critical / Very high (≥190 mg/dL)": 200,
+}
+
 
 def _patient_form() -> dict:
     """UI-only patient intake. Returns the same patient_input keys the pipeline expects."""
@@ -1118,16 +1145,16 @@ def _patient_form() -> dict:
             help="Patient age in years. Used for prevention age windows and risk context.",
         )
     with p2:
-        sex = st.selectbox(
+        sex_label = st.selectbox(
             "Sex",
-            ["Unknown", "female", "male", "other"],
-            help="Biological sex as recorded for guideline-context display.",
+            list(SEX_UI_TO_CODE.keys()),
+            help="Select the patient sex category used for clinical context.",
         )
     with p3:
         diabetes_label = st.selectbox(
             "Diabetes status",
             list(DIABETES_UI_TO_CODE.keys()),
-            help="Diabetes category for risk analysis and evidence routing.",
+            help="Select the clearest diabetes category: none, prediabetes, type 1, or type 2.",
         )
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -1139,11 +1166,10 @@ def _patient_form() -> dict:
     )
     v1, v2, v3, v4 = st.columns(4, gap="medium")
     with v1:
-        sbp_raw = st.text_input(
-            "SBP (mm Hg)",
-            value="",
-            placeholder="Unknown",
-            help="ⓘ Systolic blood pressure — top number in a BP reading (mm Hg).",
+        sbp_label = st.selectbox(
+            "Systolic blood pressure (top number)",
+            list(SBP_UI_TO_VALUE.keys()),
+            help="ⓘ SBP is the top number in a blood pressure reading. Choose Normal, Elevated, High, or Critical.",
         )
     with v2:
         dbp_raw = st.text_input(
@@ -1188,11 +1214,10 @@ def _patient_form() -> dict:
     )
     r1, r2 = st.columns(2, gap="medium")
     with r1:
-        ldl_raw = st.text_input(
-            "LDL (mg/dL)",
-            value="",
-            placeholder="Leave blank if unavailable",
-            help="ⓘ Low-density lipoprotein cholesterol (mg/dL). Leave blank if unknown.",
+        ldl_label = st.selectbox(
+            "LDL cholesterol level",
+            list(LDL_UI_TO_VALUE.keys()),
+            help="ⓘ LDL is “bad” cholesterol. Choose Optimal, Borderline high, High, or Critical / Very high.",
         )
         smoking = st.selectbox(
             "Smoking",
@@ -1213,11 +1238,11 @@ def _patient_form() -> dict:
 
     return {
         "age": _parse_optional_int(age_raw),
-        "sex": None if sex == "Unknown" else sex,
-        "sbp": _parse_optional_int(sbp_raw),
+        "sex": SEX_UI_TO_CODE.get(sex_label),
+        "sbp": SBP_UI_TO_VALUE.get(sbp_label),
         "dbp": _parse_optional_int(dbp_raw),
         "diabetes": DIABETES_UI_TO_CODE.get(diabetes_label),
-        "ldl": _parse_optional_int(ldl_raw),
+        "ldl": LDL_UI_TO_VALUE.get(ldl_label),
         "bmi": bmi,
         "smoking": None if smoking == "Unknown" else smoking,
         "clinical_ascvd": True if ascvd else None,
