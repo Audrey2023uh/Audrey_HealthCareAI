@@ -69,7 +69,9 @@ def extract_patient_from_text(text: str) -> dict[str, Any]:
         if dbp:
             p["dbp"] = int(dbp.group(1))
 
-    if re.search(r"\b(type\s*2\s*diabetes|t2dm|diabetes mellitus|diabetic|dm2)\b", t):
+    if re.search(r"\b(type\s*1\s*diabetes|t1dm|dm1)\b", t):
+        p["diabetes"] = "type1"
+    elif re.search(r"\b(type\s*2\s*diabetes|t2dm|diabetes mellitus|diabetic|dm2)\b", t):
         p["diabetes"] = "type2"
     elif re.search(r"\b(prediabetes|impaired\s+glucose)\b", t):
         p["diabetes"] = "prediabetes"
@@ -159,6 +161,10 @@ def analyze_clinical_risk(patient: dict[str, Any]) -> dict[str, Any]:
         diabetes_risk = "established_type2_diabetes"
         risk_factors.append("type2_diabetes")
         preventive_needs.append("glycemic_and_cardiorenal_risk_management")
+    elif diabetes == "type1":
+        diabetes_risk = "established_type1_diabetes"
+        risk_factors.append("type1_diabetes")
+        preventive_needs.append("glycemic_and_cardiorenal_risk_management")
     elif diabetes == "prediabetes":
         diabetes_risk = "prediabetes"
         risk_factors.append("prediabetes")
@@ -184,7 +190,7 @@ def analyze_clinical_risk(patient: dict[str, Any]) -> dict[str, Any]:
         risk_factors.append("clinical_ASCVD")
         preventive_needs.append("secondary_prevention_including_statin_intensity_review")
     elif age and 40 <= int(age) <= 75 and (
-        diabetes in {"type2", "prediabetes"}
+        diabetes in {"type1", "type2", "prediabetes"}
         or "stage_1_hypertension" in risk_factors
         or "stage_2_hypertension" in risk_factors
         or smoking == "current"

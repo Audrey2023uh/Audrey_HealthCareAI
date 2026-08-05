@@ -127,6 +127,7 @@ def query_agent(state: GraphState) -> GraphState:
     if any(k in low for k in ("statin", "cholesterol", "ascvd", "lipid")) or patient.get("clinical_ascvd"):
         qtype = "cardiovascular_prevention"
     elif any(k in low for k in ("diabetes", "a1c", "glucose", "prediabetes")) or patient.get("diabetes") in {
+        "type1",
         "type2",
         "prediabetes",
     }:
