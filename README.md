@@ -11,6 +11,13 @@
 
 ### Streamlit Cloud API keys (required for LLM mode)
 
+**Important — if the app stays on “Your app is in the oven”:**
+
+1. Open the app → **Manage app** → **⋮** → **Settings**
+2. Set **Python version** to **3.11** (not 3.13/3.14)
+3. **Save** → **Reboot app**
+4. Wait 3–5 minutes
+
 If the app shows **Offline fallback**, add secrets in Streamlit:
 
 1. Open your app on Streamlit Cloud → **⋮** (Manage app) → **Settings** → **Secrets**
