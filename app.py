@@ -408,7 +408,7 @@ section[data-testid="stSidebar"] .stSuccess {
 }
 .stTextArea textarea { min-height: 120px !important; }
 
-/* ===== Dropdowns — same navy→blue gradient as .app-header ===== */
+/* ===== Dropdown trigger — same navy→blue gradient as .app-header ===== */
 .stSelectbox div[data-baseweb="select"] > div,
 div[data-baseweb="select"] > div,
 [data-testid="stSelectbox"] div[data-baseweb="select"] > div {
@@ -443,11 +443,11 @@ div[data-baseweb="select"] > div:focus-within {
     0 0 0 3px rgba(34, 211, 238, 0.22),
     0 10px 28px rgba(29, 78, 216, 0.25) !important;
 }
-.stSelectbox [data-baseweb="select"] span,
-.stSelectbox [data-baseweb="select"] div,
-div[data-baseweb="select"] span,
-div[data-baseweb="select"] div,
-[data-testid="stSelectbox"] span {
+/* Closed control label text only (not the open popup list) */
+.stSelectbox [data-baseweb="select"] > div > div > span,
+.stSelectbox [data-baseweb="select"] > div > div,
+[data-testid="stSelectbox"] [data-baseweb="select"] > div > div,
+[data-testid="stSelectbox"] [data-baseweb="select"] > div > div > span {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
@@ -470,24 +470,37 @@ div[data-baseweb="select"]:hover svg {
   color: #22D3EE !important;
 }
 
+/*
+ * Open dropdown popup — must clearly separate from page background.
+ * Covers BaseWeb popovers and newer stSelectboxVirtualDropdown portals.
+ */
 div[data-baseweb="popover"],
 div[data-baseweb="popover"] > div,
 div[data-baseweb="popover"] [data-baseweb="menu"],
 ul[role="listbox"],
 ul[data-baseweb="menu"],
 div[data-baseweb="menu"],
-div[role="listbox"] {
-  background: linear-gradient(160deg, #0F172A 0%, #1E3A8A 50%, #1D4ED8 100%) !important;
-  color: #FFFFFF !important;
-  border: 1px solid rgba(255, 255, 255, 0.16) !important;
-  border-radius: 16px !important;
-  box-shadow: 0 12px 36px rgba(15, 23, 42, 0.32) !important;
-  transition: all 0.2s ease !important;
-  animation: ceDropdownIn 180ms ease-out !important;
+div[role="listbox"],
+[data-testid="stSelectboxVirtualDropdown"],
+[data-testid="stVirtualDropdown"],
+ul[data-testid="stVirtualDropdown"],
+div[data-testid="stSelectboxVirtualDropdown"] > div,
+div[data-testid="stSelectboxVirtualDropdown"] ul {
+  background: #F1F5F9 !important;
+  background-color: #F1F5F9 !important;
+  color: #0F172A !important;
+  border: 2px solid #1D4ED8 !important;
+  border-radius: 14px !important;
+  box-shadow:
+    0 22px 48px rgba(15, 23, 42, 0.32),
+    0 8px 18px rgba(29, 78, 216, 0.18),
+    0 0 0 1px rgba(15, 23, 42, 0.06) !important;
+  z-index: 100000 !important;
   overflow: hidden !important;
+  animation: ceDropdownIn 180ms ease-out !important;
 }
 @keyframes ceDropdownIn {
-  from { opacity: 0; transform: translateY(4px); }
+  from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
@@ -496,47 +509,61 @@ ul[data-baseweb="menu"] li,
 div[data-baseweb="menu"] li,
 div[role="option"],
 li[role="option"],
-[data-baseweb="menu"] [role="option"] {
-  background: transparent !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+[data-baseweb="menu"] [role="option"],
+[data-testid="stSelectboxVirtualDropdown"] li,
+[data-testid="stSelectboxVirtualDropdown"] [role="option"],
+[data-testid="stVirtualDropdown"] li,
+[data-testid="stVirtualDropdown"] [role="option"] {
+  background: #FFFFFF !important;
+  color: #0F172A !important;
+  -webkit-text-fill-color: #0F172A !important;
   font-size: 14px !important;
-  font-weight: 500 !important;
+  font-weight: 600 !important;
   border-left: 4px solid transparent !important;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.22) !important;
+  border-bottom: 1px solid #E2E8F0 !important;
   padding-top: 12px !important;
   padding-bottom: 12px !important;
   padding-left: 14px !important;
-  transition: all 0.2s ease !important;
+  transition: all 0.15s ease !important;
 }
 ul[role="listbox"] li:last-child,
 ul[data-baseweb="menu"] li:last-child,
-div[role="option"]:last-child {
+div[role="option"]:last-child,
+[data-testid="stSelectboxVirtualDropdown"] li:last-child {
   border-bottom: none !important;
 }
 ul[role="listbox"] li span,
 ul[data-baseweb="menu"] li span,
 div[role="option"] span,
-li[role="option"] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+li[role="option"] *,
+[data-testid="stSelectboxVirtualDropdown"] li span,
+[data-testid="stSelectboxVirtualDropdown"] [role="option"] *,
+[data-testid="stVirtualDropdown"] li span,
+[data-testid="stVirtualDropdown"] [role="option"] * {
+  color: #0F172A !important;
+  -webkit-text-fill-color: #0F172A !important;
 }
 
 ul[role="listbox"] li:hover,
 ul[data-baseweb="menu"] li:hover,
 div[role="option"]:hover,
 li[role="option"]:hover,
-[data-baseweb="menu"] [role="option"]:hover {
-  background: rgba(37, 99, 235, 0.55) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  border-left-color: #22D3EE !important;
+[data-baseweb="menu"] [role="option"]:hover,
+[data-testid="stSelectboxVirtualDropdown"] li:hover,
+[data-testid="stSelectboxVirtualDropdown"] [role="option"]:hover,
+[data-testid="stVirtualDropdown"] li:hover {
+  background: linear-gradient(90deg, #EFF6FF 0%, #DBEAFE 100%) !important;
+  color: #0F172A !important;
+  -webkit-text-fill-color: #0F172A !important;
+  border-left-color: #1D4ED8 !important;
 }
 ul[role="listbox"] li:hover *,
 ul[data-baseweb="menu"] li:hover *,
-div[role="option"]:hover * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+div[role="option"]:hover *,
+[data-testid="stSelectboxVirtualDropdown"] li:hover *,
+[data-testid="stSelectboxVirtualDropdown"] [role="option"]:hover * {
+  color: #0F172A !important;
+  -webkit-text-fill-color: #0F172A !important;
 }
 
 ul[role="listbox"] li[aria-selected="true"],
@@ -544,25 +571,30 @@ ul[data-baseweb="menu"] li[aria-selected="true"],
 div[role="option"][aria-selected="true"],
 li[aria-selected="true"],
 li[aria-selected="true"]:hover,
-[data-baseweb="menu"] [role="option"][aria-selected="true"] {
-  background: linear-gradient(90deg, rgba(29, 78, 216, 0.95), rgba(14, 165, 233, 0.45)) !important;
+[data-baseweb="menu"] [role="option"][aria-selected="true"],
+[data-testid="stSelectboxVirtualDropdown"] li[aria-selected="true"],
+[data-testid="stSelectboxVirtualDropdown"] [role="option"][aria-selected="true"],
+[data-testid="stVirtualDropdown"] li[aria-selected="true"] {
+  background: linear-gradient(90deg, #1E3A8A 0%, #1D4ED8 55%, #0EA5E9 100%) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
   border-left: 4px solid #22D3EE !important;
 }
 ul[role="listbox"] li[aria-selected="true"] *,
-div[role="option"][aria-selected="true"] * {
+div[role="option"][aria-selected="true"] *,
+[data-testid="stSelectboxVirtualDropdown"] li[aria-selected="true"] *,
+[data-testid="stSelectboxVirtualDropdown"] [role="option"][aria-selected="true"] * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
 }
 
 ul[role="listbox"] li[aria-disabled="true"],
 ul[data-baseweb="menu"] li[aria-disabled="true"],
 div[role="option"][aria-disabled="true"],
 li[aria-disabled="true"] {
-  background: rgba(51, 65, 85, 0.55) !important;
+  background: #F8FAFC !important;
   color: #94A3B8 !important;
   -webkit-text-fill-color: #94A3B8 !important;
   pointer-events: none !important;
@@ -571,42 +603,48 @@ li[aria-disabled="true"] {
 [data-baseweb="menu"] hr,
 [data-baseweb="menu"] li[role="separator"],
 ul[role="listbox"] hr {
-  border-color: rgba(148, 163, 184, 0.28) !important;
-  background: rgba(148, 163, 184, 0.28) !important;
+  border-color: #CBD5E1 !important;
+  background: #CBD5E1 !important;
 }
 
 ul[role="listbox"],
 ul[data-baseweb="menu"],
 div[data-baseweb="menu"],
-div[data-baseweb="popover"] > div {
+div[data-baseweb="popover"] > div,
+[data-testid="stSelectboxVirtualDropdown"],
+[data-testid="stVirtualDropdown"] {
   scrollbar-width: thin !important;
-  scrollbar-color: rgba(148, 163, 184, 0.55) transparent !important;
+  scrollbar-color: #94A3B8 #E2E8F0 !important;
 }
 ul[role="listbox"]::-webkit-scrollbar,
 ul[data-baseweb="menu"]::-webkit-scrollbar,
 div[data-baseweb="menu"]::-webkit-scrollbar,
-div[data-baseweb="popover"] > div::-webkit-scrollbar {
+div[data-baseweb="popover"] > div::-webkit-scrollbar,
+[data-testid="stSelectboxVirtualDropdown"]::-webkit-scrollbar {
   width: 8px !important;
 }
 ul[role="listbox"]::-webkit-scrollbar-track,
 ul[data-baseweb="menu"]::-webkit-scrollbar-track,
 div[data-baseweb="menu"]::-webkit-scrollbar-track,
-div[data-baseweb="popover"] > div::-webkit-scrollbar-track {
-  background: transparent !important;
-  border-radius: 16px !important;
+div[data-baseweb="popover"] > div::-webkit-scrollbar-track,
+[data-testid="stSelectboxVirtualDropdown"]::-webkit-scrollbar-track {
+  background: #E2E8F0 !important;
+  border-radius: 14px !important;
 }
 ul[role="listbox"]::-webkit-scrollbar-thumb,
 ul[data-baseweb="menu"]::-webkit-scrollbar-thumb,
 div[data-baseweb="menu"]::-webkit-scrollbar-thumb,
-div[data-baseweb="popover"] > div::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.45) !important;
+div[data-baseweb="popover"] > div::-webkit-scrollbar-thumb,
+[data-testid="stSelectboxVirtualDropdown"]::-webkit-scrollbar-thumb {
+  background: #64748B !important;
   border-radius: 8px !important;
 }
 ul[role="listbox"]::-webkit-scrollbar-thumb:hover,
 ul[data-baseweb="menu"]::-webkit-scrollbar-thumb:hover,
 div[data-baseweb="menu"]::-webkit-scrollbar-thumb:hover,
-div[data-baseweb="popover"] > div::-webkit-scrollbar-thumb:hover {
-  background: #22D3EE !important;
+div[data-baseweb="popover"] > div::-webkit-scrollbar-thumb:hover,
+[data-testid="stSelectboxVirtualDropdown"]::-webkit-scrollbar-thumb:hover {
+  background: #1D4ED8 !important;
 }
 
 /* Number steppers — compact +/− controls */
