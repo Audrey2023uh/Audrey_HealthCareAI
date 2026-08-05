@@ -114,7 +114,9 @@ CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "100"))
 
 APP_DISCLAIMER = os.getenv(
     "APP_DISCLAIMER",
-    "Research/education prototype only. Not a medical device. The clinician makes the final decision.",
+    "Research prototype only. This application is intended for educational and research purposes "
+    "and does not provide medical advice. Clinical decisions remain the responsibility of "
+    "qualified healthcare professionals.",
 )
 
 

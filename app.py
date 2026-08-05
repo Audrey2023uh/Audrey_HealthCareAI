@@ -120,8 +120,8 @@ html, body, .stApp {
 
 .disclaimer {
   background: #FFFBEB; border: 1px solid #FDE68A; border-left: 4px solid var(--warning);
-  border-radius: 14px; padding: 12px 16px; margin-bottom: 20px;
-  font-size: 13px; color: #92400E; line-height: 1.5;
+  border-radius: 14px; padding: 14px 18px; margin-bottom: 22px;
+  font-size: 13.5px; color: #92400E; line-height: 1.55; font-weight: 500;
 }
 
 /* ===== Cards ===== */
@@ -609,17 +609,63 @@ div[data-baseweb="popover"] > div::-webkit-scrollbar-thumb:hover {
   background: #22D3EE !important;
 }
 
-/* Number steppers (if any remain) — light, readable */
+/* Number steppers — compact +/− controls */
 .stNumberInput button,
-[data-testid="stNumberInput"] button {
-  background: #F1F5F9 !important;
-  color: #0F172A !important;
-  border: 1px solid #CBD5E1 !important;
-  border-radius: 8px !important;
+[data-testid="stNumberInput"] button,
+[data-testid="stNumberInput"] [data-testid="stNumberInputStepDown"],
+[data-testid="stNumberInput"] [data-testid="stNumberInputStepUp"] {
+  background: #F8FAFC !important;
+  color: #334155 !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 6px !important;
+  min-width: 28px !important;
+  width: 28px !important;
+  height: 28px !important;
+  padding: 0 !important;
+  font-size: 12px !important;
+  line-height: 1 !important;
 }
 .stNumberInput button:hover {
-  background: #E2E8F0 !important;
-  color: #0F172A !important;
+  background: #EEF2FF !important;
+  color: #1D4ED8 !important;
+  border-color: #BFDBFE !important;
+}
+div[data-testid="stNumberInput"] > div {
+  gap: 4px !important;
+}
+[data-testid="stNumberInput"] input {
+  min-height: 38px !important;
+  font-size: 14px !important;
+}
+
+/* Form section cards spacing */
+.form-grid-gap { margin-bottom: 4px; }
+.bmi-live {
+  margin-top: 8px; padding: 10px 12px; border-radius: 10px;
+  background: #EFF6FF; border: 1px solid #BFDBFE;
+  color: #1E3A8A; font-size: 13px; font-weight: 600;
+}
+.summary-card {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
+  border: 1px solid var(--border); border-radius: 16px;
+  padding: 18px 20px; margin: 16px 0 8px 0; box-shadow: var(--shadow);
+}
+.summary-card h3 {
+  margin: 0 0 6px 0; font-size: 16px; font-weight: 800; color: var(--navy);
+}
+.summary-card .cap { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+.summary-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+}
+.summary-cell {
+  background: #FFFFFF; border: 1px solid var(--border); border-radius: 12px;
+  padding: 12px 14px;
+}
+.summary-cell .lbl { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.summary-cell .val { margin-top: 6px; font-size: 18px; font-weight: 800; color: var(--navy); }
+.summary-cell .sub { margin-top: 4px; font-size: 12px; color: var(--muted); line-height: 1.4; }
+@media (max-width: 900px) {
+  .summary-grid { grid-template-columns: 1fr; }
 }
 
 label, .stSelectbox label, .stNumberInput label, .stTextInput label, .stTextArea label,
@@ -1022,45 +1068,197 @@ def run_question(
     )
 
 
+def _parse_optional_float(raw: str | None) -> float | None:
+    s = (raw or "").strip().lower()
+    if not s or s in {"unknown", "n/a", "na", "-", "none"}:
+        return None
+    try:
+        return float(s.replace(",", ""))
+    except ValueError:
+        return None
+
+
+def _parse_optional_int(raw: str | None) -> int | None:
+    v = _parse_optional_float(raw)
+    if v is None:
+        return None
+    return int(round(v))
+
+
+def _calc_bmi(height_cm: float | None, weight_kg: float | None) -> float | None:
+    if not height_cm or not weight_kg or height_cm <= 0 or weight_kg <= 0:
+        return None
+    meters = height_cm / 100.0
+    return round(weight_kg / (meters * meters), 1)
+
+
+DIABETES_UI_TO_CODE = {
+    "Unknown": None,
+    "No Diabetes": "none",
+    "Prediabetes": "prediabetes",
+    "Type 1 Diabetes": "type1",
+    "Type 2 Diabetes": "type2",
+}
+
+
 def _patient_form() -> dict:
+    """UI-only patient intake. Returns the same patient_input keys the pipeline expects."""
+    # ----- Patient Information -----
     st.markdown(
-        '<div class="card"><div class="card-title">Patient assessment</div>'
-        '<div class="card-caption">Enter known clinical values. Leave zero / Unknown when unavailable.</div>',
+        '<div class="card"><div class="card-title">Patient Information</div>'
+        '<div class="card-caption">Demographics used for context. Leave blank or Unknown when unavailable.</div>',
         unsafe_allow_html=True,
     )
-    c1, c2, c3, c4 = st.columns(4, gap="medium")
-    with c1:
-        age = st.number_input("Age (years)", min_value=0, max_value=120, value=0, step=1)
-        sex = st.selectbox("Sex", ["Unknown", "female", "male", "other"])
-    with c2:
-        sbp = st.number_input("SBP (mm Hg)", min_value=0, max_value=300, value=0, step=1)
-        dbp = st.number_input("DBP (mm Hg)", min_value=0, max_value=200, value=0, step=1)
-    with c3:
-        diabetes = st.selectbox("Diabetes status", ["Unknown", "none", "prediabetes", "type2"])
-        ldl = st.number_input("LDL (mg/dL)", min_value=0, max_value=400, value=0, step=1)
-    with c4:
-        bmi = st.number_input("BMI", min_value=0.0, max_value=80.0, value=0.0, step=0.1)
-        smoking = st.selectbox("Smoking", ["Unknown", "never", "former", "current"])
-    st.write("")
-    ascvd = st.checkbox("Clinical ASCVD history (MI, stroke, revascularization, etc.)")
-    other = st.text_input("Other CV risk factors (comma-separated)", placeholder="e.g., CKD, family history")
+    p1, p2, p3 = st.columns(3, gap="medium")
+    with p1:
+        age_raw = st.text_input(
+            "Age (years)",
+            value="",
+            placeholder="Leave blank if unavailable",
+            help="Patient age in years. Used for prevention age windows and risk context.",
+        )
+    with p2:
+        sex = st.selectbox(
+            "Sex",
+            ["Unknown", "female", "male", "other"],
+            help="Biological sex as recorded for guideline-context display.",
+        )
+    with p3:
+        diabetes_label = st.selectbox(
+            "Diabetes status",
+            list(DIABETES_UI_TO_CODE.keys()),
+            help="Diabetes category for risk analysis and evidence routing.",
+        )
     st.markdown("</div>", unsafe_allow_html=True)
 
-    def _nz_num(v):
-        return None if not v else v
+    # ----- Vital Signs -----
+    st.markdown(
+        '<div class="card"><div class="card-title">Vital Signs</div>'
+        '<div class="card-caption">Enter measured values when known. BMI is calculated from height and weight.</div>',
+        unsafe_allow_html=True,
+    )
+    v1, v2, v3, v4 = st.columns(4, gap="medium")
+    with v1:
+        sbp_raw = st.text_input(
+            "SBP (mm Hg)",
+            value="",
+            placeholder="Unknown",
+            help="ⓘ Systolic blood pressure — top number in a BP reading (mm Hg).",
+        )
+    with v2:
+        dbp_raw = st.text_input(
+            "DBP (mm Hg)",
+            value="",
+            placeholder="Unknown",
+            help="ⓘ Diastolic blood pressure — bottom number in a BP reading (mm Hg).",
+        )
+    with v3:
+        height_raw = st.text_input(
+            "Height (cm)",
+            value="",
+            placeholder="e.g., 170",
+            help="ⓘ Height in centimeters. Used with weight to calculate BMI automatically.",
+        )
+    with v4:
+        weight_raw = st.text_input(
+            "Weight (kg)",
+            value="",
+            placeholder="e.g., 75",
+            help="ⓘ Weight in kilograms. Used with height to calculate BMI automatically.",
+        )
+
+    height_cm = _parse_optional_float(height_raw)
+    weight_kg = _parse_optional_float(weight_raw)
+    bmi = _calc_bmi(height_cm, weight_kg)
+    if bmi is not None:
+        st.markdown(
+            f'<div class="bmi-live">Calculated BMI: <strong>{bmi}</strong> '
+            f'<span style="font-weight:500;color:#64748B;">(from height {height_cm:g} cm · weight {weight_kg:g} kg)</span></div>',
+            unsafe_allow_html=True,
+        )
+    else:
+        st.caption("BMI will appear here once both height and weight are entered.")
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # ----- Risk Factors -----
+    st.markdown(
+        '<div class="card"><div class="card-title">Risk Factors</div>'
+        '<div class="card-caption">Lipids, tobacco, ASCVD history, and other cardiovascular risk context.</div>',
+        unsafe_allow_html=True,
+    )
+    r1, r2 = st.columns(2, gap="medium")
+    with r1:
+        ldl_raw = st.text_input(
+            "LDL (mg/dL)",
+            value="",
+            placeholder="Leave blank if unavailable",
+            help="ⓘ Low-density lipoprotein cholesterol (mg/dL). Leave blank if unknown.",
+        )
+        smoking = st.selectbox(
+            "Smoking",
+            ["Unknown", "never", "former", "current"],
+            help="Tobacco use status for cardiovascular risk context.",
+        )
+    with r2:
+        ascvd = st.checkbox(
+            "Clinical ASCVD history (MI, stroke, revascularization, etc.)",
+            help="ⓘ Atherosclerotic cardiovascular disease history — prior MI, stroke, CABG/PCI, PAD, etc.",
+        )
+        other = st.text_input(
+            "Other CV risk factors (comma-separated)",
+            placeholder="e.g., CKD, family history",
+            help="Additional cardiovascular risk factors not captured above.",
+        )
+    st.markdown("</div>", unsafe_allow_html=True)
 
     return {
-        "age": _nz_num(int(age)) if age else None,
+        "age": _parse_optional_int(age_raw),
         "sex": None if sex == "Unknown" else sex,
-        "sbp": _nz_num(int(sbp)) if sbp else None,
-        "dbp": _nz_num(int(dbp)) if dbp else None,
-        "diabetes": None if diabetes == "Unknown" else diabetes,
-        "ldl": _nz_num(int(ldl)) if ldl else None,
-        "bmi": _nz_num(float(bmi)) if bmi else None,
+        "sbp": _parse_optional_int(sbp_raw),
+        "dbp": _parse_optional_int(dbp_raw),
+        "diabetes": DIABETES_UI_TO_CODE.get(diabetes_label),
+        "ldl": _parse_optional_int(ldl_raw),
+        "bmi": bmi,
         "smoking": None if smoking == "Unknown" else smoking,
         "clinical_ascvd": True if ascvd else None,
         "other_cv_risk_factors": [x.strip() for x in other.split(",") if x.strip()],
     }
+
+
+def _render_prediction_summary(result: dict) -> None:
+    """UI-only summary card from existing pipeline outputs (no new ML)."""
+    risk = result.get("risk_analysis") or {}
+    conf = float(result.get("confidence") or 0.0)
+    band = (risk.get("cv_risk_band_prototype") or "unknown").replace("_", " ")
+    factors = risk.get("cardiovascular_risk_factors") or []
+    top = ", ".join(str(f).replace("_", " ") for f in factors[:5]) if factors else "Insufficient structured factors"
+    more = f" · +{len(factors) - 5} more" if len(factors) > 5 else ""
+    st.markdown(
+        f"""
+        <div class="summary-card">
+          <h3>Prediction summary</h3>
+          <div class="cap">Derived from the existing CDSS risk analysis and verification confidence — not a validated clinical calculator.</div>
+          <div class="summary-grid">
+            <div class="summary-cell">
+              <div class="lbl">Estimated risk</div>
+              <div class="val">{_esc(band.title())}</div>
+              <div class="sub">Prototype CV risk band</div>
+            </div>
+            <div class="summary-cell">
+              <div class="lbl">Confidence</div>
+              <div class="val">{conf*100:.0f}%</div>
+              <div class="sub">Evidence verification confidence</div>
+            </div>
+            <div class="summary-cell">
+              <div class="lbl">Key contributing factors</div>
+              <div class="val" style="font-size:14px;line-height:1.45;">{_esc(top)}{_esc(more)}</div>
+              <div class="sub">From structured risk analysis</div>
+            </div>
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def main() -> None:
@@ -1264,6 +1462,8 @@ def main() -> None:
 
     modes = evidence_mode_labels(result)
     st.markdown(provenance_badge_html(modes), unsafe_allow_html=True)
+
+    _render_prediction_summary(result)
 
     tabs = st.tabs(
         [
