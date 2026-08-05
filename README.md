@@ -5,6 +5,10 @@
 
 > Research / education prototype only. **Not a medical device.** A licensed clinician makes the final decision.
 
+## Live demo
+
+**Open the app:** [https://audrey2023uh-audrey-healthcareai-app-6w8imm.streamlit.app/](https://audrey2023uh-audrey-healthcareai-app-6w8imm.streamlit.app/)
+
 ---
 
 ## Resume-style project summary
