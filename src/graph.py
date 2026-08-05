@@ -75,7 +75,8 @@ def patient_assessment_agent(state: GraphState) -> GraphState:
     t0 = time.perf_counter()
     q = (state.get("question") or "").strip()
     extracted = extract_patient_from_text(q)
-    patient = merge_patient(extracted, state.get("patient_input"))
+    # Form fills blanks; values found in the clinical question win (avoids stale form state).
+    patient = merge_patient(state.get("patient_input"), extracted)
     filled = [
         k
         for k in ("age", "sex", "sbp", "dbp", "diabetes", "ldl", "bmi", "smoking", "clinical_ascvd")

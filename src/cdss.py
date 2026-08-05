@@ -53,9 +53,9 @@ def extract_patient_from_text(text: str) -> dict[str, Any]:
         if 1 <= age <= 120:
             p["age"] = age
 
-    if re.search(r"\b(female|woman|women|\bf\b)\b", t):
+    if re.search(r"\b(female|woman|women)\b", t) or re.search(r"\b\d{1,3}\s*-?\s*y(?:ear)?(?:s)?(?:\s*old)?\s*f\b", t):
         p["sex"] = "female"
-    elif re.search(r"\b(male|man|men|\bm\b)\b", t):
+    elif re.search(r"\b(male|man|men)\b", t) or re.search(r"\b\d{1,3}\s*-?\s*y(?:ear)?(?:\s*old)?\s*m\b", t):
         p["sex"] = "male"
 
     bp = re.search(r"\b(\d{2,3})\s*/\s*(\d{2,3})\b", t)

@@ -9,6 +9,30 @@
 
 **Open the app:** [https://audrey2023uh-audrey-healthcareai-app-6w8imm.streamlit.app/](https://audrey2023uh-audrey-healthcareai-app-6w8imm.streamlit.app/)
 
+### Streamlit Cloud API keys (required for LLM mode)
+
+If the app shows **Offline fallback**, add secrets in Streamlit:
+
+1. Open your app on Streamlit Cloud → **⋮** (Manage app) → **Settings** → **Secrets**
+2. Paste:
+
+```toml
+OPENAI_API_KEY = "sk-or-v1-YOUR_REAL_KEY"
+OPENAI_BASE_URL = "https://openrouter.ai/api/v1"
+OPENAI_MODEL = "openai/gpt-4o-mini"
+```
+
+For a direct OpenAI key instead:
+
+```toml
+OPENAI_API_KEY = "sk-YOUR_OPENAI_KEY"
+OPENAI_BASE_URL = "https://api.openai.com/v1"
+OPENAI_MODEL = "gpt-4o-mini"
+```
+
+3. Click **Save**, then reboot the app.
+4. Sidebar **LLM** should say **Configured** (not Offline Fallback).
+
 ---
 
 ## Resume-style project summary
