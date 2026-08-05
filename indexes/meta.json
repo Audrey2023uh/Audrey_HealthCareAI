@@ -1,0 +1,27 @@
+{
+  "n_docs": 19,
+  "n_chunks": 20,
+  "dim": 1207,
+  "embedder": "local:tfidf",
+  "sources": [
+    "ahrq",
+    "clinical_guideline",
+    "medlineplus",
+    "medquad_sample",
+    "pmc",
+    "pubmed_style",
+    "rct",
+    "systematic_review"
+  ],
+  "ranking": "priority_1_to_7_then_quality_within_priority",
+  "tier_chunk_counts": {
+    "1": 10,
+    "6": 3,
+    "5": 1,
+    "4": 2,
+    "3": 2,
+    "7": 1,
+    "2": 1
+  },
+  "n_superseded": 1
+}
