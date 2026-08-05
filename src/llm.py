@@ -5,7 +5,12 @@ import json
 import re
 from typing import Any
 
-from src.config import OPENAI_API_KEY, OPENAI_BASE_URL, OPENAI_MODEL, llm_configured
+from src.config import (
+    get_openai_api_key,
+    get_openai_base_url,
+    get_openai_model,
+    llm_configured,
+)
 
 
 SYSTEM_CLINICAL = """You are a clinical evidence assistant for a university research prototype.
@@ -27,9 +32,9 @@ def chat_json_or_text(messages: list[dict[str, str]], expect_json: bool = False)
     try:
         from openai import OpenAI
 
-        client = OpenAI(api_key=OPENAI_API_KEY, base_url=OPENAI_BASE_URL)
+        client = OpenAI(api_key=get_openai_api_key(), base_url=get_openai_base_url())
         kwargs: dict[str, Any] = {
-            "model": OPENAI_MODEL,
+            "model": get_openai_model(),
             "messages": messages,
             "temperature": 0.1,
         }
