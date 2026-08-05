@@ -1114,7 +1114,7 @@ SBP_UI_TO_VALUE = {
     "Elevated (120–129 mm Hg)": 125,
     "High — Stage 1 (130–139 mm Hg)": 135,
     "High — Stage 2 (140–179 mm Hg)": 150,
-    "Critical / Hypertensive crisis (≥180 mm Hg)": 190,
+    "Critical / Hypertensive crisis (>=180 mm Hg)": 190,
 }
 
 # Meaningful LDL categories → representative values for existing pipeline fields
@@ -1124,7 +1124,7 @@ LDL_UI_TO_VALUE = {
     "Near optimal (100–129 mg/dL)": 115,
     "Borderline high (130–159 mg/dL)": 145,
     "High (160–189 mg/dL)": 175,
-    "Critical / Very high (≥190 mg/dL)": 200,
+    "Critical / Very high (>=190 mg/dL)": 200,
 }
 
 
