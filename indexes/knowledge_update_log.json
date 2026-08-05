@@ -1,0 +1,94 @@
+{
+  "agent": "KnowledgeUpdateAgent",
+  "checked_at": "2026-08-05T15:55:56.275538+00:00",
+  "n_sources": 8,
+  "possible_remote_changes": 2,
+  "unreachable": 2,
+  "local_supersession_applied": false,
+  "index_rebuilt": false,
+  "rebuild_meta": null,
+  "elapsed_s": 4.985,
+  "sources": [
+    {
+      "org": "USPSTF",
+      "topic_key": "statin_primary_prevention",
+      "doc_id": "USPSTF-STATIN-2022",
+      "tier": 1,
+      "url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/statin-use-in-adults-preventive-medication",
+      "reachable": true,
+      "possible_remote_change": false,
+      "last_modified": null
+    },
+    {
+      "org": "USPSTF",
+      "topic_key": "diabetes_screening",
+      "doc_id": "USPSTF-DIABETES-SCREEN",
+      "tier": 1,
+      "url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/screening-for-prediabetes-and-type-2-diabetes",
+      "reachable": true,
+      "possible_remote_change": false,
+      "last_modified": null
+    },
+    {
+      "org": "USPSTF",
+      "topic_key": "hypertension_screening",
+      "doc_id": "USPSTF-HTN-SCREEN",
+      "tier": 1,
+      "url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/hypertension-in-adults-screening",
+      "reachable": true,
+      "possible_remote_change": false,
+      "last_modified": null
+    },
+    {
+      "org": "ADA",
+      "topic_key": "glycemic_targets",
+      "doc_id": "ADA-A1C-2024",
+      "tier": 1,
+      "url": "https://diabetes.org/about-diabetes",
+      "reachable": true,
+      "possible_remote_change": true,
+      "last_modified": "Wed, 05 Aug 2026 15:05:17 GMT"
+    },
+    {
+      "org": "ACC/AHA",
+      "topic_key": "cholesterol_ascvd",
+      "doc_id": "ACC-AHA-STATIN-ASCVD",
+      "tier": 1,
+      "url": "https://www.heart.org/en/health-topics/cholesterol",
+      "reachable": false,
+      "possible_remote_change": false,
+      "last_modified": null
+    },
+    {
+      "org": "MedlinePlus",
+      "topic_key": "htn_patient_edu",
+      "doc_id": "MEDLINEPLUS-HTN",
+      "tier": 5,
+      "url": "https://medlineplus.gov/highbloodpressure.html",
+      "reachable": true,
+      "possible_remote_change": true,
+      "last_modified": "Wed, 05 Aug 2026 04:14:59 GMT"
+    },
+    {
+      "org": "AHRQ",
+      "topic_key": "shared_decision",
+      "doc_id": "AHRQ-SHARED-DECISION",
+      "tier": 1,
+      "url": "https://www.ahrq.gov/sdm/index.html",
+      "reachable": false,
+      "possible_remote_change": false,
+      "last_modified": null
+    },
+    {
+      "org": "PubMed Central",
+      "topic_key": "pmc_portal",
+      "doc_id": "PMC-OPEN-ACCESS-NOTE",
+      "tier": 4,
+      "url": "https://www.ncbi.nlm.nih.gov/pmc/",
+      "reachable": true,
+      "possible_remote_change": false,
+      "last_modified": null
+    }
+  ],
+  "note": "Prototype checks official URLs and local superseded flags. Full automatic ingestion of new guideline PDFs is future work."
+}

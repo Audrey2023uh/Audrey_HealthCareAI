@@ -1,0 +1,111 @@
+[
+  {
+    "question": "What statin intensity is recommended for adults with clinical ASCVD?",
+    "wall_clock_s": 0.0278,
+    "timings": {
+      "knowledge_update_agent_s": 1.100008375942707e-06,
+      "patient_assessment_s": 0.0013780000153928995,
+      "risk_analysis_s": 5.399982910603285e-06,
+      "query_agent_s": 1.3199984095990658e-05,
+      "retrieval_agent_s": 0.010258900001645088,
+      "n_chunks": 4.0,
+      "verification_agent_s": 0.0004241999704390764,
+      "recommendation_agent_s": 9.970000246539712e-05,
+      "transparency_agent_s": 1.4999997802078724e-05,
+      "total_pipeline_s": 0.012195499963127077
+    },
+    "n_chunks": 4,
+    "confidence": 0.73,
+    "needs_human_review": true,
+    "citation_accuracy": {
+      "n_citations": 19,
+      "n_valid": 19,
+      "citation_precision": 1.0,
+      "has_any_citation": true
+    },
+    "top_doc_ids": [
+      "ACC-AHA-STATIN-ASCVD",
+      "USPSTF-STATIN-2022",
+      "USPSTF-HTN-SCREEN"
+    ],
+    "groundedness_notes": [
+      "Limited patient data \u2014 recommendations are more generic."
+    ],
+    "rag_answer_preview": "## Clinical Decision Support \u2014 Structured Recommendation\n\n**Clinical question:** What statin intensity is recommended for adults with clinical ASCVD?\n\n### Step 1 \u2014 Patient Assessment\n- Age: None\n- Sex: None\n- Blood pressure: None/None mm Hg\n- Diabetes status: None\n- LDL: None\n- BMI: None\n- Smoking: None\n- Clinical ASCVD: True\n- Other CV risk factors: clinical_ASCVD_history\n\n### Step 2 \u2014 Clinical R",
+    "plain_llm_preview": "[No API key] Plain LLM unavailable. Without RAG, a fluent model could invent guidelines/doses with no source links \u2014 this prototype avoids that by retrieving first.",
+    "qualitative": "RAG answer includes source-linked chunks; plain LLM has no retrieval audit trail."
+  },
+  {
+    "question": "What A1C target is commonly used for nonpregnant adults with type 2 diabetes?",
+    "wall_clock_s": 0.0043,
+    "timings": {
+      "knowledge_update_agent_s": 1.00000761449337e-06,
+      "patient_assessment_s": 4.529999569058418e-05,
+      "risk_analysis_s": 5.300040356814861e-06,
+      "query_agent_s": 1.5600002370774746e-05,
+      "retrieval_agent_s": 0.0012348999734967947,
+      "n_chunks": 4.0,
+      "verification_agent_s": 0.0001898000482469797,
+      "recommendation_agent_s": 4.509999416768551e-05,
+      "transparency_agent_s": 1.8600025214254856e-05,
+      "total_pipeline_s": 0.001555600087158382
+    },
+    "n_chunks": 4,
+    "confidence": 0.73,
+    "needs_human_review": true,
+    "citation_accuracy": {
+      "n_citations": 19,
+      "n_valid": 19,
+      "citation_precision": 1.0,
+      "has_any_citation": true
+    },
+    "top_doc_ids": [
+      "ADA-A1C-2024",
+      "USPSTF-DIABETES-SCREEN",
+      "USPSTF-STATIN-2022"
+    ],
+    "groundedness_notes": [
+      "Limited patient data \u2014 recommendations are more generic."
+    ],
+    "rag_answer_preview": "## Clinical Decision Support \u2014 Structured Recommendation\n\n**Clinical question:** What A1C target is commonly used for nonpregnant adults with type 2 diabetes?\n\n### Step 1 \u2014 Patient Assessment\n- Age: None\n- Sex: None\n- Blood pressure: None/None mm Hg\n- Diabetes status: type2\n- LDL: None\n- BMI: None\n- Smoking: None\n- Clinical ASCVD: None\n- Other CV risk factors: none listed\n\n### Step 2 \u2014 Clinical Ri",
+    "plain_llm_preview": "[No API key] Plain LLM unavailable. Without RAG, a fluent model could invent guidelines/doses with no source links \u2014 this prototype avoids that by retrieving first.",
+    "qualitative": "RAG answer includes source-linked chunks; plain LLM has no retrieval audit trail."
+  },
+  {
+    "question": "When should adults be screened for hypertension according to USPSTF?",
+    "wall_clock_s": 0.0039,
+    "timings": {
+      "knowledge_update_agent_s": 6.00004568696022e-07,
+      "patient_assessment_s": 4.0700018871575594e-05,
+      "risk_analysis_s": 5.799985956400633e-06,
+      "query_agent_s": 1.3899989426136017e-05,
+      "retrieval_agent_s": 0.0010226999875158072,
+      "n_chunks": 5.0,
+      "verification_agent_s": 0.00012149999383836985,
+      "recommendation_agent_s": 4.279997665435076e-05,
+      "transparency_agent_s": 1.2299977242946625e-05,
+      "total_pipeline_s": 0.0012602999340742826
+    },
+    "n_chunks": 5,
+    "confidence": 0.65,
+    "needs_human_review": true,
+    "citation_accuracy": {
+      "n_citations": 23,
+      "n_valid": 23,
+      "citation_precision": 1.0,
+      "has_any_citation": true
+    },
+    "top_doc_ids": [
+      "USPSTF-HTN-SCREEN",
+      "USPSTF-STATIN-2022",
+      "USPSTF-DIABETES-SCREEN"
+    ],
+    "groundedness_notes": [
+      "1 cross-source conflict theme(s) flagged.",
+      "Limited patient data \u2014 recommendations are more generic."
+    ],
+    "rag_answer_preview": "## Clinical Decision Support \u2014 Structured Recommendation\n\n**Clinical question:** When should adults be screened for hypertension according to USPSTF?\n\n### Step 1 \u2014 Patient Assessment\n- Age: None\n- Sex: None\n- Blood pressure: None/None mm Hg\n- Diabetes status: None\n- LDL: None\n- BMI: None\n- Smoking: None\n- Clinical ASCVD: None\n- Other CV risk factors: hypertension\n\n### Step 2 \u2014 Clinical Risk Analys",
+    "plain_llm_preview": "[No API key] Plain LLM unavailable. Without RAG, a fluent model could invent guidelines/doses with no source links \u2014 this prototype avoids that by retrieving first.",
+    "qualitative": "RAG answer includes source-linked chunks; plain LLM has no retrieval audit trail."
+  }
+]

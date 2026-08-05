@@ -1,0 +1,3 @@
+# Generated artifacts (eval JSON, demo logs)
+*.json
+!../data/
