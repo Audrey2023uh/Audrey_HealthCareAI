@@ -1,17 +1,18 @@
-# Healthcare AI CDSS — Streamlit Community Cloud runtime
-# Keep this lean so cloud installs finish reliably.
+# Compatible with Streamlit Cloud Python 3.11 / 3.12
+# In Streamlit: Manage app → Settings → Python version → 3.11 (required)
 
-streamlit>=1.36.0,<1.46
-openai>=1.40.0,<2
-langchain>=0.3.0,<0.4
-langgraph>=0.2.0,<0.4
-langchain-openai>=0.2.0,<0.4
-langchain-core>=0.3.0,<0.4
-faiss-cpu>=1.8.0,<1.12
-numpy>=1.26.0,<2.3
-pandas>=2.2.0,<2.3
-scikit-learn>=1.4.0,<1.7
-requests>=2.32.0
-python-dotenv>=1.0.0
-pydantic>=2.7.0
-tqdm>=4.66.0
+streamlit==1.41.1
+openai==1.59.6
+langchain==0.3.14
+langgraph==0.2.60
+langchain-openai==0.2.14
+langchain-core==0.3.29
+faiss-cpu==1.9.0.post1
+numpy==1.26.4
+pandas==2.2.3
+scikit-learn==1.5.2
+requests==2.32.3
+python-dotenv==1.0.1
+pydantic==2.10.4
+tqdm==4.67.1
+pyarrow==17.0.0
