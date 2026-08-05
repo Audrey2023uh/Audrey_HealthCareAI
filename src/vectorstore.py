@@ -71,20 +71,18 @@ class VectorStore:
         return meta
 
     def load(self) -> None:
-        if not FAISS_INDEX.exists() or not CHUNKS_JSON.exists():
+        tfidf_path = INDEX_DIR / "tfidf.pkl"
+        # Cloud / fresh clone: rebuild if FAISS, chunks, or TF-IDF embedder is missing.
+        if not FAISS_INDEX.exists() or not CHUNKS_JSON.exists() or not tfidf_path.exists():
             self.build_from_seed()
             return
         import pickle
 
         self.index = faiss.read_index(str(FAISS_INDEX))
         self.chunks = [annotate_missing_metadata(c) for c in json.loads(CHUNKS_JSON.read_text(encoding="utf-8"))]
-        tfidf_path = INDEX_DIR / "tfidf.pkl"
-        if tfidf_path.exists():
-            with open(tfidf_path, "rb") as f:
-                self.embedder = pickle.load(f)
-            self.embedder_name = "local:tfidf"
-        else:
-            self.embedder, self.embedder_name = get_embedder()
+        with open(tfidf_path, "rb") as f:
+            self.embedder = pickle.load(f)
+        self.embedder_name = "local:tfidf"
         meta_path = INDEX_DIR / "meta.json"
         self.meta = json.loads(meta_path.read_text(encoding="utf-8")) if meta_path.exists() else {}
 
