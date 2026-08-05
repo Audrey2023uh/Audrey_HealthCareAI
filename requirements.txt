@@ -1,19 +1,17 @@
-# Healthcare AI — Source-Linked Evidence-Based Clinical Decision Support
-# Milestone 2 engineering prototype (Group 7 — Audrey)
+# Healthcare AI CDSS — Streamlit Community Cloud runtime
+# Keep this lean so cloud installs finish reliably.
 
-streamlit>=1.36.0
-langchain>=0.3.0
-langgraph>=0.2.0
-langchain-openai>=0.2.0
-langchain-core>=0.3.0
-openai>=1.40.0
-faiss-cpu>=1.8.0
-numpy>=1.26.0
-pandas>=2.2.0
-scikit-learn>=1.4.0
+streamlit>=1.36.0,<1.46
+openai>=1.40.0,<2
+langchain>=0.3.0,<0.4
+langgraph>=0.2.0,<0.4
+langchain-openai>=0.2.0,<0.4
+langchain-core>=0.3.0,<0.4
+faiss-cpu>=1.8.0,<1.12
+numpy>=1.26.0,<2.3
+pandas>=2.2.0,<2.3
+scikit-learn>=1.4.0,<1.7
 requests>=2.32.0
 python-dotenv>=1.0.0
 pydantic>=2.7.0
-fastapi>=0.111.0
-uvicorn>=0.30.0
 tqdm>=4.66.0
