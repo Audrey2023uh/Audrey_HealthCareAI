@@ -6,7 +6,12 @@ from typing import Protocol
 
 import numpy as np
 
-from src.config import OPENAI_API_KEY, OPENAI_BASE_URL, OPENAI_EMBEDDING_MODEL, llm_configured
+from src.config import (
+    get_openai_api_key,
+    get_openai_base_url,
+    get_openai_embedding_model,
+    llm_configured,
+)
 
 
 class Embedder(Protocol):
@@ -54,8 +59,8 @@ class OpenAIEmbedder:
     def __init__(self, model: str | None = None) -> None:
         from openai import OpenAI
 
-        self.model = model or OPENAI_EMBEDDING_MODEL or "text-embedding-3-small"
-        self.client = OpenAI(api_key=OPENAI_API_KEY, base_url=OPENAI_BASE_URL)
+        self.model = model or get_openai_embedding_model() or "text-embedding-3-small"
+        self.client = OpenAI(api_key=get_openai_api_key(), base_url=get_openai_base_url())
 
     def embed_documents(self, texts: list[str]) -> np.ndarray:
         out = []
@@ -72,9 +77,10 @@ class OpenAIEmbedder:
 
 
 def get_embedder(prefer_api: bool = True) -> tuple[object, str]:
-    if prefer_api and llm_configured() and OPENAI_EMBEDDING_MODEL:
+    emb_model = get_openai_embedding_model()
+    if prefer_api and llm_configured() and emb_model:
         try:
-            return OpenAIEmbedder(), f"openai:{OPENAI_EMBEDDING_MODEL}"
+            return OpenAIEmbedder(), f"openai:{emb_model}"
         except Exception:
             pass
     return TfidfEmbedder(), "local:tfidf"
