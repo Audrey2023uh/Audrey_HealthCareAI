@@ -7,13 +7,12 @@
 
 ## Live demo
 
-**Open the app (Streamlit Cloud):**  
-https://audrey2023uh-audrey-healthcareai-app-6w8imm.streamlit.app/
+| | Link |
+|---|---|
+| **Live Streamlit app** | [https://audrey2023uh-audrey-healthcareai-app-6w8imm.streamlit.app/](https://audrey2023uh-audrey-healthcareai-app-6w8imm.streamlit.app/) |
+| **GitHub repository** | [https://github.com/Audrey2023uh/Audrey_HealthCareAI](https://github.com/Audrey2023uh/Audrey_HealthCareAI) |
 
-**GitHub repository:**  
-https://github.com/Audrey2023uh/Audrey_HealthCareAI
-
-> After each push to `main`, Streamlit Cloud redeploys automatically. The live URL above stays the same.
+> Latest UI polish is on `main`. Open the live app link above (hard-refresh after Streamlit finishes redeploying). The URL does not change when you push updates.
 
 ### Streamlit Cloud API keys (required for LLM mode)
 
