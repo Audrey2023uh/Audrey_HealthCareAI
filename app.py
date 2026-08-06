@@ -17,14 +17,16 @@ ROOT = Path(__file__).resolve().parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.config import APP_DISCLAIMER, TOP_K, llm_configured, provider_label_for_ui
-
+# Must be the first Streamlit command (before other st.* / secrets access).
 st.set_page_config(
     page_title="Clinical Evidence CDSS",
     page_icon="🩺",
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
+from src.config import APP_DISCLAIMER, TOP_K, llm_configured, provider_label_for_ui
+
 
 # ---------------------------------------------------------------------------
 # Premium healthcare theme (inspired by enterprise clinical dashboards)
