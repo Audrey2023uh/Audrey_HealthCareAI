@@ -1,7 +1,6 @@
-"""LLM helper with extractive fallback when no API key is configured."""
+"""LLM helper with OpenRouter primary path and extractive offline fallback."""
 from __future__ import annotations
 
-import json
 import re
 from typing import Any
 
@@ -12,6 +11,8 @@ from src.config import (
     llm_configured,
 )
 
+# Seconds — free models can be slow; fail over instead of hanging forever.
+LLM_TIMEOUT_S = 45.0
 
 SYSTEM_CLINICAL = """You are a clinical evidence assistant for a university research prototype.
 Rules:
@@ -26,24 +27,56 @@ Rules:
 """
 
 
+def _sanitize_error_message(exc: BaseException) -> str:
+    """Return a short safe error token — never include secrets or raw payloads."""
+    raw = f"{type(exc).__name__}"
+    # Strip anything that looks like a key if it ever appears in exception text
+    _ = re.sub(r"sk-[a-zA-Z0-9_\-]{8,}", "[REDACTED]", str(exc))
+    return f"__LLM_ERROR__:{raw}"
+
+
 def chat_json_or_text(messages: list[dict[str, str]], expect_json: bool = False) -> str:
+    """
+    Call OpenRouter (OpenAI-compatible). On missing key / timeout / API failure,
+    return an __LLM_ERROR__ token so callers fall back to extractive mode.
+    Never raises to the UI.
+    """
     if not llm_configured():
         return ""
     try:
         from openai import OpenAI
 
-        client = OpenAI(api_key=get_openai_api_key(), base_url=get_openai_base_url())
+        client = OpenAI(
+            api_key=get_openai_api_key(),
+            base_url=get_openai_base_url(),
+            timeout=LLM_TIMEOUT_S,
+            max_retries=1,
+            default_headers={
+                "HTTP-Referer": "https://audrey2023uh-audrey-healthcareai-app-6w8imm.streamlit.app/",
+                "X-Title": "Clinical Evidence CDSS",
+            },
+        )
         kwargs: dict[str, Any] = {
             "model": get_openai_model(),
             "messages": messages,
             "temperature": 0.1,
         }
         if expect_json:
-            kwargs["response_format"] = {"type": "json_object"}
-        resp = client.chat.completions.create(**kwargs)
-        return (resp.choices[0].message.content or "").strip()
+            # Some free models reject response_format; try without forcing if needed
+            try:
+                kwargs["response_format"] = {"type": "json_object"}
+                resp = client.chat.completions.create(**kwargs)
+            except Exception:
+                kwargs.pop("response_format", None)
+                resp = client.chat.completions.create(**kwargs)
+        else:
+            resp = client.chat.completions.create(**kwargs)
+        content = (resp.choices[0].message.content or "").strip()
+        if not content:
+            return "__LLM_ERROR__:EmptyResponse"
+        return content
     except Exception as exc:
-        return f"__LLM_ERROR__:{exc}"
+        return _sanitize_error_message(exc)
 
 
 def extractive_answer(query: str, hits: list[dict[str, Any]]) -> str:

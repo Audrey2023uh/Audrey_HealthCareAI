@@ -42,6 +42,7 @@ class GraphState(TypedDict, total=False):
     knowledge_update: dict[str, Any]
     run_knowledge_update: bool
     transparency: dict[str, Any]
+    generation_mode: str
     error: str
 
 
@@ -228,9 +229,10 @@ def verification_agent(state: GraphState) -> GraphState:
     hits = state.get("hits") or []
     conflict_report = detect_evidence_conflicts(hits)
 
-    # Draft for groundedness (extractive or LLM)
+    # Draft for groundedness (OpenRouter LLM or extractive offline fallback)
     q = state.get("cleaned_query") or state.get("question") or ""
     context = state.get("context") or ""
+    generation_mode = "offline_fallback"
     if llm_configured():
         draft = chat_json_or_text(
             [
@@ -245,10 +247,14 @@ def verification_agent(state: GraphState) -> GraphState:
                 },
             ]
         )
-        if not draft or draft.startswith("__LLM_ERROR__"):
+        if draft and not draft.startswith("__LLM_ERROR__"):
+            generation_mode = "openrouter_free"
+        else:
             draft = extractive_answer(q, hits)
+            generation_mode = "offline_fallback"
     else:
         draft = extractive_answer(q, hits)
+        generation_mode = "offline_fallback"
 
     cited = set(int(x) for x in re.findall(r"\[(\d+)\]", draft))
     unsupported_cites = [c for c in cited if c < 1 or c > len(hits)]
@@ -327,11 +333,13 @@ def verification_agent(state: GraphState) -> GraphState:
         "verification": verification,
         "confidence": confidence,
         "needs_human_review": needs_review,
+        "generation_mode": generation_mode,
         "timings": timings,
         "agent_trace": _trace(
             state,
             "Step4_EvidenceVerification",
-            f"conflicts={len(conflict_report.get('conflicts') or [])}; confidence={confidence}",
+            f"conflicts={len(conflict_report.get('conflicts') or [])}; "
+            f"confidence={confidence}; generation={generation_mode}",
         ),
     }
 
@@ -372,6 +380,12 @@ def transparency_agent(state: GraphState) -> GraphState:
     transparency = {
         "confidence": confidence,
         "needs_human_review": needs_review,
+        "generation_mode": state.get("generation_mode") or "offline_fallback",
+        "llm_provider": (
+            "OpenRouter Free"
+            if (state.get("generation_mode") == "openrouter_free")
+            else "Offline Fallback"
+        ),
         "sources_consulted": [
             {
                 "n": i,
@@ -392,6 +406,7 @@ def transparency_agent(state: GraphState) -> GraphState:
     final = (rec.get("narrative") or state.get("draft_answer") or "").strip()
     final += "\n\n### Step 7 — Transparency\n"
     final += f"- **Confidence:** {confidence:.2f}\n"
+    final += f"- **LLM provider:** {transparency['llm_provider']}\n"
     final += f"- **Human review recommended:** {needs_review}\n"
     final += f"- **Evidence hierarchy:** {state.get('ranking_policy')}\n"
     final += f"- **Sources consulted:** {len(hits)}\n"
@@ -410,6 +425,7 @@ def transparency_agent(state: GraphState) -> GraphState:
     return {
         "transparency": transparency,
         "final_answer": final,
+        "generation_mode": state.get("generation_mode") or "offline_fallback",
         "timings": timings,
         "agent_trace": _trace(state, "Step7_Transparency", f"confidence={confidence}; review={needs_review}"),
     }
