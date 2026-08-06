@@ -1734,6 +1734,21 @@ def main() -> None:
                 It presents patient context, priority-ranked evidence, verification notes, and structured
                 recommendations with citations for clinician review.
               </p>
+              <p style="font-size:14px;line-height:1.7;color:#0F172A;margin-top:16px;">
+                <strong>Live demo:</strong>
+                <a href="https://audrey2023uh-audrey-healthcareai-app-6w8imm.streamlit.app/"
+                   target="_blank" rel="noopener noreferrer"
+                   style="color:#1D4ED8;font-weight:700;text-decoration:underline;">
+                  https://audrey2023uh-audrey-healthcareai-app-6w8imm.streamlit.app/
+                </a>
+                <br/>
+                <strong>Source code:</strong>
+                <a href="https://github.com/Audrey2023uh/Audrey_HealthCareAI"
+                   target="_blank" rel="noopener noreferrer"
+                   style="color:#1D4ED8;font-weight:700;text-decoration:underline;">
+                  https://github.com/Audrey2023uh/Audrey_HealthCareAI
+                </a>
+              </p>
               <p style="font-size:13px;color:#64748B;margin-top:16px;line-height:1.7;">
                 <strong style="color:#0F172A;">Developed by Audrey Rah</strong><br/>
                 University of Houston<br/>
