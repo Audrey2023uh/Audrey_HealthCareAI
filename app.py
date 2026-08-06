@@ -25,7 +25,14 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-from src.config import APP_DISCLAIMER, TOP_K, llm_configured, provider_label_for_ui
+from src.config import (
+    APP_DISCLAIMER,
+    TOP_K,
+    llm_configured,
+    provider_label_for_ui,
+    refresh_openai_settings,
+    secrets_diagnostics,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -1339,6 +1346,9 @@ def main() -> None:
     render_header()
     st.markdown(f'<div class="disclaimer">{_esc(APP_DISCLAIMER)}</div>', unsafe_allow_html=True)
 
+    # Re-read secrets after Streamlit runtime is fully up (Cloud injects them here).
+    refresh_openai_settings()
+
     with st.sidebar:
         try:
             meta = load_store().meta or {}
@@ -1352,7 +1362,9 @@ def main() -> None:
             index_ok = False
             index_err = str(exc)
 
+        diag = secrets_diagnostics()
         llm_label = provider_label_for_ui()
+        key_status = "Detected" if diag["key_status"] == "detected" else "Missing"
 
         st.markdown(
             """
@@ -1385,6 +1397,8 @@ def main() -> None:
                 <div class="sidebar-kpi"><div class="lbl">Chunks</div><div class="val">{_esc(n_chunks)}</div></div>
                 <div class="sidebar-kpi wide"><div class="lbl">Embedding</div><div class="val sm">{_esc(embedder)}</div></div>
                 <div class="sidebar-kpi wide"><div class="lbl">LLM</div><div class="val sm">{_esc(llm_label)}</div></div>
+                <div class="sidebar-kpi wide"><div class="lbl">API key</div><div class="val sm">{_esc(key_status)}</div></div>
+                <div class="sidebar-kpi wide"><div class="lbl">Model</div><div class="val sm">{_esc(diag.get('model') or '—')}</div></div>
                 <div class="sidebar-kpi wide"><div class="lbl">Top-k</div><div class="val">{_esc(TOP_K)}</div></div>
               </div>
 
@@ -1402,6 +1416,14 @@ def main() -> None:
         )
         if not index_ok:
             st.error(f"Index not ready: {index_err}")
+
+        if diag["key_status"] != "detected":
+            st.warning(
+                "OpenRouter key not detected. In Manage app → Settings → Secrets paste:\n\n"
+                "OPENROUTER_API_KEY = \"your-key\"\n"
+                "OPENROUTER_MODEL = \"openrouter/free\"\n\n"
+                "Then Save and Reboot. Do not put the key in GitHub."
+            )
 
         if st.button("Knowledge update", use_container_width=True):
             from src import vectorstore as vs_mod

@@ -4,11 +4,8 @@ OpenRouter (Streamlit Secrets / env) is preferred:
   OPENROUTER_API_KEY
   OPENROUTER_MODEL   (default: openrouter/free)
 
-Legacy OPENAI_* names remain supported as fallbacks.
 Never log or print secret values.
-
-Important: do NOT read st.secrets at module import time — that breaks
-Streamlit Cloud boot (ImportError before set_page_config).
+Do not read st.secrets at module import time.
 """
 from __future__ import annotations
 
@@ -43,109 +40,183 @@ _PLACEHOLDER_KEYS = {
     "sk-xxx",
     "your-key",
     "YOUR_KEY_HERE",
+    "your-openrouter-key",
+    "paste-your-openrouter-key-here",
+    "paste-your-key-here",
     "configured in Streamlit Secrets",
 }
 
+_API_KEY_NAMES = (
+    "OPENROUTER_API_KEY",
+    "OPENAI_API_KEY",
+    "OPENROUTER_KEY",
+    "OR_API_KEY",
+)
+_MODEL_NAMES = (
+    "OPENROUTER_MODEL",
+    "OPENAI_MODEL",
+)
+_BASE_URL_NAMES = (
+    "OPENROUTER_BASE_URL",
+    "OPENAI_BASE_URL",
+)
 
-def _streamlit_runtime_ready() -> bool:
-    """True only when a Streamlit script run context exists."""
-    try:
-        from streamlit.runtime.scriptrunner import get_script_run_ctx
 
-        return get_script_run_ctx() is not None
-    except Exception:
+def _looks_like_real_key(value: str) -> bool:
+    v = (value or "").strip()
+    if not v or v in _PLACEHOLDER_KEYS:
         return False
+    # Accept OpenRouter / OpenAI style keys; also any non-placeholder long token
+    if v.startswith("sk-"):
+        return len(v) >= 20
+    return len(v) >= 16
 
 
-def _from_streamlit_secrets(name: str) -> str:
-    """Read a secret from Streamlit only when the runtime is ready. Never raises."""
-    if not _streamlit_runtime_ready():
-        return ""
+def _from_env(names: tuple[str, ...]) -> str:
+    for name in names:
+        val = os.getenv(name, "").strip()
+        if val:
+            return val
+    # Case-insensitive env scan (some hosts alter casing)
+    lower_map = {k.lower(): v for k, v in os.environ.items()}
+    for name in names:
+        val = (lower_map.get(name.lower()) or "").strip()
+        if val:
+            return val
+    return ""
+
+
+def _secrets_obj() -> Any | None:
+    """Return st.secrets when available. Safe during / after script start."""
     try:
         import streamlit as st
 
-        secrets = st.secrets
+        return st.secrets
     except Exception:
+        return None
+
+
+def _from_mapping(mapping: Any, names: tuple[str, ...]) -> str:
+    if mapping is None:
         return ""
-
-    try:
-        if name in secrets:
-            return str(secrets[name]).strip()
-    except Exception:
-        pass
-
-    for section in ("openrouter", "openai"):
+    # Direct key access
+    for name in names:
         try:
-            sec: Any = secrets.get(section, None)  # type: ignore[attr-defined]
+            if name in mapping:
+                val = str(mapping[name]).strip()
+                if val:
+                    return val
         except Exception:
-            sec = None
-        if sec is None:
-            continue
-        short = name.lower().replace("openrouter_", "").replace("openai_", "")
-        aliases = {
-            "api_key": ("api_key", "key", "OPENROUTER_API_KEY", "OPENAI_API_KEY"),
-            "model": ("model", "OPENROUTER_MODEL", "OPENAI_MODEL"),
-            "base_url": ("base_url", "base", "OPENROUTER_BASE_URL", "OPENAI_BASE_URL"),
-            "embedding_model": ("embedding_model", "embeddings", "OPENAI_EMBEDDING_MODEL"),
-        }
-        keys_to_try = aliases.get(short, (short, name))
+            pass
         try:
-            for k in keys_to_try:
-                if k in sec:
-                    return str(sec[k]).strip()
+            val = str(mapping.get(name, "")).strip()  # type: ignore[attr-defined]
+            if val:
+                return val
+        except Exception:
+            pass
+        try:
+            val = str(getattr(mapping, name, "") or "").strip()
+            if val:
+                return val
+        except Exception:
+            pass
+    # Case-insensitive key scan
+    try:
+        keys = list(mapping.keys())  # type: ignore[attr-defined]
+    except Exception:
+        keys = []
+    lower_index = {str(k).lower(): k for k in keys}
+    for name in names:
+        real = lower_index.get(name.lower())
+        if real is None:
+            continue
+        try:
+            val = str(mapping[real]).strip()
+            if val:
+                return val
         except Exception:
             continue
     return ""
 
 
-def _setting(name: str, default: str = "") -> str:
-    env_val = os.getenv(name, "").strip()
+def _from_streamlit_secrets(names: tuple[str, ...]) -> str:
+    secrets = _secrets_obj()
+    if secrets is None:
+        return ""
+    # Flat secrets
+    found = _from_mapping(secrets, names)
+    if found:
+        return found
+    # Nested [openrouter] / [openai]
+    for section in ("openrouter", "openai", "OpenRouter", "OPENROUTER"):
+        try:
+            sec = secrets[section]
+        except Exception:
+            try:
+                sec = secrets.get(section)  # type: ignore[attr-defined]
+            except Exception:
+                sec = None
+        if sec is None:
+            continue
+        nested_names = names + ("api_key", "key", "API_KEY", "model", "MODEL")
+        found = _from_mapping(sec, nested_names)
+        if found:
+            return found
+    return ""
+
+
+def _setting(names: tuple[str, ...], default: str = "") -> str:
+    env_val = _from_env(names)
     if env_val:
         return env_val
-    secret_val = _from_streamlit_secrets(name)
+    secret_val = _from_streamlit_secrets(names)
     if secret_val:
         return secret_val
     return default
 
 
 def get_openai_api_key() -> str:
-    """API key for chat completions (OpenRouter preferred)."""
-    return _setting("OPENROUTER_API_KEY") or _setting("OPENAI_API_KEY", "")
+    return _setting(_API_KEY_NAMES, "")
 
 
 def get_openai_base_url() -> str:
-    """OpenRouter-compatible base URL."""
-    return (
-        _setting("OPENROUTER_BASE_URL")
-        or _setting("OPENAI_BASE_URL")
-        or OPENROUTER_BASE_URL
-    )
+    return _setting(_BASE_URL_NAMES, "") or OPENROUTER_BASE_URL
 
 
 def get_openai_model() -> str:
-    """Primary online model — defaults to openrouter/free."""
-    return (
-        _setting("OPENROUTER_MODEL")
-        or _setting("OPENAI_MODEL")
-        or DEFAULT_OPENROUTER_MODEL
-    )
+    return _setting(_MODEL_NAMES, "") or DEFAULT_OPENROUTER_MODEL
 
 
 def get_openai_embedding_model() -> str:
-    return _setting("OPENAI_EMBEDDING_MODEL", "")
+    return _setting(("OPENAI_EMBEDDING_MODEL",), "")
 
 
 def llm_configured() -> bool:
+    return _looks_like_real_key(get_openai_api_key())
+
+
+def secrets_diagnostics() -> dict[str, str]:
+    """Non-sensitive status for the sidebar (never includes the key)."""
     key = get_openai_api_key()
-    return bool(key) and key not in _PLACEHOLDER_KEYS
+    present = _looks_like_real_key(key)
+    source = "missing"
+    if present:
+        if _from_env(_API_KEY_NAMES):
+            source = "environment"
+        elif _from_streamlit_secrets(_API_KEY_NAMES):
+            source = "streamlit_secrets"
+        else:
+            source = "detected"
+    return {
+        "key_status": "detected" if present else "missing",
+        "key_source": source,
+        "model": get_openai_model(),
+        "base_url": get_openai_base_url(),
+        "provider_ready": "yes" if present else "no",
+    }
 
 
 def provider_label_for_ui(generation_mode: str | None = None) -> str:
-    """
-    Display label:
-      - OpenRouter Free when online generation is active / available
-      - Offline Fallback only when fallback is actually in use (or no key)
-    """
     if generation_mode == "openrouter_free":
         return "OpenRouter Free"
     if generation_mode == "offline_fallback":
@@ -153,18 +224,10 @@ def provider_label_for_ui(generation_mode: str | None = None) -> str:
     return "OpenRouter Free" if llm_configured() else "Offline Fallback"
 
 
-# Env-only snapshots at import (safe on Streamlit Cloud). Prefer getters at runtime.
-OPENAI_API_KEY = os.getenv("OPENROUTER_API_KEY", "").strip() or os.getenv("OPENAI_API_KEY", "").strip()
-OPENAI_BASE_URL = (
-    os.getenv("OPENROUTER_BASE_URL", "").strip()
-    or os.getenv("OPENAI_BASE_URL", "").strip()
-    or OPENROUTER_BASE_URL
-)
-OPENAI_MODEL = (
-    os.getenv("OPENROUTER_MODEL", "").strip()
-    or os.getenv("OPENAI_MODEL", "").strip()
-    or DEFAULT_OPENROUTER_MODEL
-)
+# Env-only snapshots at import. Prefer getters at runtime.
+OPENAI_API_KEY = _from_env(_API_KEY_NAMES)
+OPENAI_BASE_URL = _from_env(_BASE_URL_NAMES) or OPENROUTER_BASE_URL
+OPENAI_MODEL = _from_env(_MODEL_NAMES) or DEFAULT_OPENROUTER_MODEL
 OPENAI_EMBEDDING_MODEL = os.getenv("OPENAI_EMBEDDING_MODEL", "").strip()
 
 TOP_K = int(os.getenv("TOP_K", "5"))
