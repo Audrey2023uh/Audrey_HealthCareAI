@@ -6,6 +6,9 @@ OpenRouter (Streamlit Secrets / env) is preferred:
 
 Legacy OPENAI_* names remain supported as fallbacks.
 Never log or print secret values.
+
+Important: do NOT read st.secrets at module import time — that breaks
+Streamlit Cloud boot (ImportError before set_page_config).
 """
 from __future__ import annotations
 
@@ -20,8 +23,11 @@ load_dotenv(ROOT / ".env")
 
 DATA_DIR = ROOT / "data"
 INDEX_DIR = ROOT / "indexes"
-INDEX_DIR.mkdir(parents=True, exist_ok=True)
-DATA_DIR.mkdir(parents=True, exist_ok=True)
+try:
+    INDEX_DIR.mkdir(parents=True, exist_ok=True)
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+except OSError:
+    pass
 
 SEED_KB = DATA_DIR / "seed_medical_kb.json"
 FAISS_INDEX = INDEX_DIR / "faiss.index"
@@ -41,8 +47,20 @@ _PLACEHOLDER_KEYS = {
 }
 
 
+def _streamlit_runtime_ready() -> bool:
+    """True only when a Streamlit script run context exists."""
+    try:
+        from streamlit.runtime.scriptrunner import get_script_run_ctx
+
+        return get_script_run_ctx() is not None
+    except Exception:
+        return False
+
+
 def _from_streamlit_secrets(name: str) -> str:
-    """Read a secret from Streamlit (Cloud or local secrets.toml). Never raises."""
+    """Read a secret from Streamlit only when the runtime is ready. Never raises."""
+    if not _streamlit_runtime_ready():
+        return ""
     try:
         import streamlit as st
 
@@ -56,7 +74,6 @@ def _from_streamlit_secrets(name: str) -> str:
     except Exception:
         pass
 
-    # Nested optional sections
     for section in ("openrouter", "openai"):
         try:
             sec: Any = secrets.get(section, None)  # type: ignore[attr-defined]
@@ -133,15 +150,22 @@ def provider_label_for_ui(generation_mode: str | None = None) -> str:
         return "OpenRouter Free"
     if generation_mode == "offline_fallback":
         return "Offline Fallback"
-    # Pre-run sidebar hint
     return "OpenRouter Free" if llm_configured() else "Offline Fallback"
 
 
-# Backward-compatible module attrs (prefer getters at call time)
-OPENAI_API_KEY = get_openai_api_key()
-OPENAI_BASE_URL = get_openai_base_url()
-OPENAI_MODEL = get_openai_model()
-OPENAI_EMBEDDING_MODEL = get_openai_embedding_model()
+# Env-only snapshots at import (safe on Streamlit Cloud). Prefer getters at runtime.
+OPENAI_API_KEY = os.getenv("OPENROUTER_API_KEY", "").strip() or os.getenv("OPENAI_API_KEY", "").strip()
+OPENAI_BASE_URL = (
+    os.getenv("OPENROUTER_BASE_URL", "").strip()
+    or os.getenv("OPENAI_BASE_URL", "").strip()
+    or OPENROUTER_BASE_URL
+)
+OPENAI_MODEL = (
+    os.getenv("OPENROUTER_MODEL", "").strip()
+    or os.getenv("OPENAI_MODEL", "").strip()
+    or DEFAULT_OPENROUTER_MODEL
+)
+OPENAI_EMBEDDING_MODEL = os.getenv("OPENAI_EMBEDDING_MODEL", "").strip()
 
 TOP_K = int(os.getenv("TOP_K", "5"))
 CANDIDATE_K = int(os.getenv("CANDIDATE_K", "20"))
