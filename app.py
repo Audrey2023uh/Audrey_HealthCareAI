@@ -78,12 +78,61 @@ html, body, .stApp {
 
 #MainMenu, footer, header { visibility: hidden; }
 
-.block-container {
-  padding-top: 20px !important;
-  padding-bottom: 48px !important;
-  padding-left: 28px !important;
-  padding-right: 28px !important;
-  max-width: 1280px;
+/* ===== Full-width enterprise dashboard (not a narrow document column) ===== */
+section[data-testid="stSidebar"] {
+  width: 230px !important;
+  min-width: 230px !important;
+  max-width: 230px !important;
+  flex: 0 0 230px !important;
+}
+section[data-testid="stSidebar"] > div {
+  width: 230px !important;
+  min-width: 230px !important;
+  max-width: 230px !important;
+}
+section.main,
+[data-testid="stAppViewContainer"] > section.main,
+div[data-testid="stAppViewContainer"] section.main {
+  flex: 1 1 auto !important;
+  width: auto !important;
+  max-width: none !important;
+}
+.block-container,
+div[data-testid="stMainBlockContainer"],
+section.main .block-container,
+div[data-testid="stAppViewContainer"] .main .block-container {
+  max-width: min(1680px, calc(100vw - 250px)) !important;
+  width: 100% !important;
+  padding-top: 10px !important;
+  padding-bottom: 16px !important;
+  padding-left: 18px !important;
+  padding-right: 18px !important;
+}
+/* Tighten Streamlit vertical rhythm in the main workspace */
+section.main [data-testid="stVerticalBlock"] {
+  gap: 0.45rem !important;
+}
+section.main [data-testid="stHorizontalBlock"] {
+  gap: 0.65rem !important;
+}
+@media (max-width: 1280px) {
+  .block-container,
+  div[data-testid="stMainBlockContainer"] {
+    max-width: calc(100vw - 240px) !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+}
+@media (max-width: 900px) {
+  section[data-testid="stSidebar"] {
+    width: 220px !important;
+    min-width: 220px !important;
+    max-width: 220px !important;
+  }
+  .block-container,
+  div[data-testid="stMainBlockContainer"] {
+    max-width: 100% !important;
+  }
 }
 
 /* ===== Header ===== */
@@ -91,9 +140,9 @@ html, body, .stApp {
   position: relative;
   overflow: hidden;
   background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 55%, #1D4ED8 100%);
-  border-radius: 20px;
-  padding: 28px 32px;
-  margin-bottom: 20px;
+  border-radius: 14px;
+  padding: 14px 22px;
+  margin-bottom: 10px;
   box-shadow: var(--shadow-lg);
   color: #fff;
 }
@@ -101,66 +150,68 @@ html, body, .stApp {
   content: "";
   position: absolute;
   right: -40px; top: -40px;
-  width: 220px; height: 220px;
+  width: 180px; height: 180px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(34,211,238,0.35), transparent 70%);
   pointer-events: none;
 }
-.app-header-inner { position: relative; z-index: 1; display: flex; gap: 18px; align-items: flex-start; }
+.app-header-inner { position: relative; z-index: 1; display: flex; gap: 14px; align-items: flex-start; }
 .brand-mark {
-  width: 52px; height: 52px; border-radius: 14px; flex-shrink: 0;
+  width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0;
   background: linear-gradient(145deg, #22D3EE, #1D4ED8);
   display: flex; align-items: center; justify-content: center;
-  font-weight: 800; font-size: 18px; color: #0F172A;
+  font-weight: 800; font-size: 15px; color: #0F172A;
   box-shadow: 0 8px 20px rgba(34,211,238,0.25);
 }
 .app-header h1 {
-  margin: 0; font-size: 30px; font-weight: 800; letter-spacing: -0.03em;
+  margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.03em;
   color: #FFFFFF !important; line-height: 1.15;
 }
 .app-header .subtitle {
-  margin-top: 8px; font-size: 15px; line-height: 1.55; color: #CBD5E1; max-width: 900px;
+  margin-top: 4px; font-size: 13px; line-height: 1.4; color: #CBD5E1; max-width: 1100px;
 }
-.pills { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; }
+.pills { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; }
 .pill {
-  font-size: 12px; font-weight: 600; color: #E0F2FE;
+  font-size: 11px; font-weight: 600; color: #E0F2FE;
   background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.18);
-  border-radius: 999px; padding: 6px 12px;
+  border-radius: 999px; padding: 4px 10px;
 }
 
 .disclaimer {
   background: #FFFBEB; border: 1px solid #F59E0B; border-left: 4px solid var(--warning);
-  border-radius: 14px; padding: 14px 18px; margin-bottom: 22px;
-  font-size: 13.5px; color: #92400E; line-height: 1.55; font-weight: 500;
+  border-radius: 10px; padding: 8px 14px; margin-bottom: 10px;
+  font-size: 12.5px; color: #92400E; line-height: 1.4; font-weight: 500;
 }
 
 /* ===== Cards ===== */
 .card {
   background: var(--card);
   border: 1px solid var(--border-strong);
-  border-radius: var(--radius);
-  padding: 24px 26px;
-  margin-bottom: 20px;
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
   box-shadow: none;
 }
 .card-title {
-  margin: 0 0 6px 0; font-size: 20px; font-weight: 700; color: var(--navy); letter-spacing: -0.02em;
+  margin: 0 0 2px 0; font-size: 16px; font-weight: 700; color: var(--navy); letter-spacing: -0.02em;
 }
-.card-title.sm { font-size: 16px; font-weight: 700; }
-.card-caption { margin: 0 0 16px 0; font-size: 13px; color: var(--muted); line-height: 1.5; }
+.card-title.sm { font-size: 14px; font-weight: 700; }
+.card-caption { margin: 0 0 8px 0; font-size: 12px; color: var(--muted); line-height: 1.4; }
 
 /* ===== KPI ===== */
 .kpi-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px;
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 10px;
 }
-@media (max-width: 1100px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1500px) {
+  .kpi-grid { grid-template-columns: repeat(4, 1fr); }
+}
 @media (max-width: 640px) { .kpi-grid { grid-template-columns: 1fr; } }
 
 .kpi {
   background: var(--card);
   border: 1px solid var(--border-strong);
-  border-radius: 16px;
-  padding: 18px 18px 16px 18px;
+  border-radius: 12px;
+  padding: 12px 14px 10px 14px;
   box-shadow: none;
   position: relative;
   overflow: hidden;
@@ -170,14 +221,14 @@ html, body, .stApp {
   background: linear-gradient(180deg, var(--cyan), var(--blue));
 }
 .kpi .label {
-  font-size: 11px; font-weight: 700; color: var(--muted);
+  font-size: 10px; font-weight: 700; color: var(--muted);
   text-transform: uppercase; letter-spacing: 0.06em; padding-left: 8px;
 }
 .kpi .value {
-  margin-top: 6px; font-size: 30px; font-weight: 800; color: var(--navy);
+  margin-top: 4px; font-size: 24px; font-weight: 800; color: var(--navy);
   letter-spacing: -0.03em; line-height: 1.1; padding-left: 8px;
 }
-.kpi .hint { margin-top: 6px; font-size: 12px; color: var(--muted); padding-left: 8px; }
+.kpi .hint { margin-top: 4px; font-size: 11px; color: var(--muted); padding-left: 8px; }
 
 /* ===== Evidence tiles ===== */
 .ev-grid {
@@ -235,8 +286,8 @@ html, body, .stApp {
 .rec-item .meta { margin-top: 8px; font-size: 12px; color: var(--muted); }
 
 .app-footer {
-  margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border);
-  text-align: center; color: var(--muted); font-size: 12px; line-height: 1.7;
+  margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border);
+  text-align: center; color: var(--muted); font-size: 11px; line-height: 1.5;
 }
 .app-footer strong { color: var(--navy); font-weight: 700; font-size: 13px; }
 
@@ -255,6 +306,10 @@ section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] {
   background-color: transparent !important;
 }
 section[data-testid="stSidebar"] {
+  width: 230px !important;
+  min-width: 230px !important;
+  max-width: 230px !important;
+  flex: 0 0 230px !important;
   background:
     radial-gradient(420px 240px at 0% 0%, rgba(34, 211, 238, 0.18), transparent 60%),
     radial-gradient(380px 260px at 100% 8%, rgba(29, 78, 216, 0.35), transparent 55%),
@@ -490,8 +545,8 @@ div[data-baseweb="base-input"] {
   color: #0F172A !important;
   -webkit-text-fill-color: #0F172A !important;
   caret-color: #0F172A !important;
-  min-height: 44px !important;
-  font-size: 15px !important;
+  min-height: 38px !important;
+  font-size: 14px !important;
   font-weight: 600 !important;
   /* inset ring closes the rectangle even if Streamlit zeros border-bottom */
   box-shadow: inset 0 0 0 1px #94A3B8 !important;
@@ -525,7 +580,7 @@ div[data-baseweb="input"]:focus-within input {
   border: none !important;
   box-shadow: none !important;
 }
-.stTextArea textarea { min-height: 120px !important; }
+.stTextArea textarea { min-height: 88px !important; }
 
 /* ===== Dropdown trigger — same navy→blue gradient as .app-header ===== */
 .stSelectbox div[data-baseweb="select"] > div,
@@ -535,10 +590,10 @@ div[data-baseweb="select"] > div,
   color: #FFFFFF !important;
   border: 1px solid rgba(255, 255, 255, 0.35) !important;
   border-radius: 16px !important;
-  min-height: 48px !important;
-  padding-left: 14px !important;
-  padding-right: 12px !important;
-  font-size: 15px !important;
+  min-height: 40px !important;
+  padding-left: 12px !important;
+  padding-right: 10px !important;
+  font-size: 14px !important;
   font-weight: 600 !important;
   letter-spacing: -0.01em !important;
   box-shadow: none !important;
@@ -797,32 +852,29 @@ div[data-testid="stNumberInput"] > div {
 /* Form section cards spacing */
 .form-grid-gap { margin-bottom: 4px; }
 .bmi-live {
-  margin-top: 8px; padding: 10px 12px; border-radius: 10px;
+  margin-top: 6px; padding: 8px 10px; border-radius: 8px;
   background: #EFF6FF; border: 1px solid #BFDBFE;
-  color: #1E3A8A; font-size: 13px; font-weight: 600;
+  color: #1E3A8A; font-size: 12px; font-weight: 600;
 }
 .summary-card {
   background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
-  border: 1px solid var(--border-strong); border-radius: 16px;
-  padding: 18px 20px; margin: 16px 0 8px 0; box-shadow: none;
+  border: 1px solid var(--border-strong); border-radius: 12px;
+  padding: 12px 14px; margin: 0 0 8px 0; box-shadow: none;
 }
 .summary-card h3 {
-  margin: 0 0 6px 0; font-size: 16px; font-weight: 800; color: var(--navy);
+  margin: 0 0 4px 0; font-size: 14px; font-weight: 800; color: var(--navy);
 }
-.summary-card .cap { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+.summary-card .cap { font-size: 11px; color: var(--muted); margin-bottom: 10px; }
 .summary-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+  display: grid; grid-template-columns: 1fr; gap: 8px;
 }
 .summary-cell {
-  background: #FFFFFF; border: 1px solid var(--border-strong); border-radius: 12px;
-  padding: 12px 14px;
+  background: #FFFFFF; border: 1px solid var(--border-strong); border-radius: 10px;
+  padding: 10px 12px;
 }
-.summary-cell .lbl { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
-.summary-cell .val { margin-top: 6px; font-size: 18px; font-weight: 800; color: var(--navy); }
-.summary-cell .sub { margin-top: 4px; font-size: 12px; color: var(--muted); line-height: 1.4; }
-@media (max-width: 900px) {
-  .summary-grid { grid-template-columns: 1fr; }
-}
+.summary-cell .lbl { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.summary-cell .val { margin-top: 4px; font-size: 16px; font-weight: 800; color: var(--navy); }
+.summary-cell .sub { margin-top: 3px; font-size: 11px; color: var(--muted); line-height: 1.35; }
 
 label, .stSelectbox label, .stNumberInput label, .stTextInput label, .stTextArea label,
 [data-testid="stWidgetLabel"] p {
@@ -843,8 +895,8 @@ div[data-testid="stExpander"] {
 }
 
 .stButton > button {
-  border-radius: 12px !important; font-weight: 700 !important; font-size: 14px !important;
-  min-height: 46px !important; border: 1px solid var(--border-strong) !important;
+  border-radius: 10px !important; font-weight: 700 !important; font-size: 14px !important;
+  min-height: 40px !important; border: 1px solid var(--border-strong) !important;
   background: #FFFFFF !important; color: var(--navy) !important;
   box-shadow: none !important;
 }
@@ -959,9 +1011,9 @@ section[data-testid="stSidebar"] div[data-testid="stExpander"] {
 div[data-testid="stVerticalBlockBorderWrapper"] {
   background: #FFFFFF !important;
   border: 1px solid var(--border-strong) !important;
-  border-radius: 16px !important;
-  padding: 18px 20px 22px 20px !important;
-  margin-bottom: 18px !important;
+  border-radius: 12px !important;
+  padding: 10px 12px 12px 12px !important;
+  margin-bottom: 0 !important;
   box-shadow: none !important;
   overflow: visible !important;
 }
@@ -1460,89 +1512,87 @@ LDL_UI_TO_VALUE = {
 
 def _patient_form() -> dict:
     """UI-only patient intake. Returns the same patient_input keys the pipeline expects."""
-    # Real Streamlit bordered containers so inputs render INSIDE the card border.
-    with st.container(border=True):
-        st.markdown(
-            '<div class="card-title">Patient Information</div>'
-            '<div class="card-caption">Demographics used for context. Leave blank or Unknown when unavailable.</div>',
-            unsafe_allow_html=True,
-        )
-        p1, p2, p3 = st.columns(3, gap="medium")
-        with p1:
+    # Dashboard row: Patient Information | Vital Signs | Risk Factors
+    col_info, col_vitals, col_risk = st.columns(3, gap="small")
+
+    with col_info:
+        with st.container(border=True):
+            st.markdown(
+                '<div class="card-title">Patient Information</div>'
+                '<div class="card-caption">Demographics. Leave blank or Unknown when unavailable.</div>',
+                unsafe_allow_html=True,
+            )
             age_raw = st.text_input(
                 "Age (years)",
                 value="",
                 placeholder="Leave blank if unavailable",
                 help="Patient age in years. Used for prevention age windows and risk context.",
             )
-        with p2:
             sex_label = st.selectbox(
                 "Sex",
                 list(SEX_UI_TO_CODE.keys()),
                 help="Select the patient sex category used for clinical context.",
             )
-        with p3:
             diabetes_label = st.selectbox(
                 "Diabetes status",
                 list(DIABETES_UI_TO_CODE.keys()),
                 help="Select the clearest diabetes category: none, prediabetes, type 1, or type 2.",
             )
 
-    with st.container(border=True):
-        st.markdown(
-            '<div class="card-title">Vital Signs</div>'
-            '<div class="card-caption">Enter measured values when known. BMI is calculated from height and weight.</div>',
-            unsafe_allow_html=True,
-        )
-        v1, v2, v3, v4 = st.columns(4, gap="medium")
-        with v1:
-            sbp_label = st.selectbox(
-                "Systolic blood pressure (top number)",
-                list(SBP_UI_TO_VALUE.keys()),
-                help="ⓘ SBP is the top number in a blood pressure reading. Choose Normal, Elevated, High, or Critical.",
-            )
-        with v2:
-            dbp_raw = st.text_input(
-                "DBP (mm Hg)",
-                value="",
-                placeholder="Unknown",
-                help="ⓘ Diastolic blood pressure — bottom number in a BP reading (mm Hg).",
-            )
-        with v3:
-            height_raw = st.text_input(
-                "Height (cm)",
-                value="",
-                placeholder="e.g., 170",
-                help="ⓘ Height in centimeters. Used with weight to calculate BMI automatically.",
-            )
-        with v4:
-            weight_raw = st.text_input(
-                "Weight (kg)",
-                value="",
-                placeholder="e.g., 75",
-                help="ⓘ Weight in kilograms. Used with height to calculate BMI automatically.",
-            )
-
-        height_cm = _parse_optional_float(height_raw)
-        weight_kg = _parse_optional_float(weight_raw)
-        bmi = _calc_bmi(height_cm, weight_kg)
-        if bmi is not None:
+    with col_vitals:
+        with st.container(border=True):
             st.markdown(
-                f'<div class="bmi-live">Calculated BMI: <strong>{bmi}</strong> '
-                f'<span style="font-weight:500;color:#64748B;">(from height {height_cm:g} cm · weight {weight_kg:g} kg)</span></div>',
+                '<div class="card-title">Vital Signs</div>'
+                '<div class="card-caption">Measured values when known. BMI from height and weight.</div>',
                 unsafe_allow_html=True,
             )
-        else:
-            st.caption("BMI will appear here once both height and weight are entered.")
+            v1, v2 = st.columns(2, gap="small")
+            with v1:
+                sbp_label = st.selectbox(
+                    "Systolic blood pressure (top number)",
+                    list(SBP_UI_TO_VALUE.keys()),
+                    help="ⓘ SBP is the top number in a blood pressure reading. Choose Normal, Elevated, High, or Critical.",
+                )
+                height_raw = st.text_input(
+                    "Height (cm)",
+                    value="",
+                    placeholder="e.g., 170",
+                    help="ⓘ Height in centimeters. Used with weight to calculate BMI automatically.",
+                )
+            with v2:
+                dbp_raw = st.text_input(
+                    "DBP (mm Hg)",
+                    value="",
+                    placeholder="Unknown",
+                    help="ⓘ Diastolic blood pressure — bottom number in a BP reading (mm Hg).",
+                )
+                weight_raw = st.text_input(
+                    "Weight (kg)",
+                    value="",
+                    placeholder="e.g., 75",
+                    help="ⓘ Weight in kilograms. Used with height to calculate BMI automatically.",
+                )
 
-    with st.container(border=True):
-        st.markdown(
-            '<div class="card-title">Risk Factors</div>'
-            '<div class="card-caption">Lipids, tobacco, ASCVD history, and other cardiovascular risk context.</div>',
-            unsafe_allow_html=True,
-        )
-        r1, r2 = st.columns(2, gap="medium")
-        with r1:
+            height_cm = _parse_optional_float(height_raw)
+            weight_kg = _parse_optional_float(weight_raw)
+            bmi = _calc_bmi(height_cm, weight_kg)
+            if bmi is not None:
+                st.markdown(
+                    f'<div class="bmi-live">Calculated BMI: <strong>{bmi}</strong> '
+                    f'<span style="font-weight:500;color:#64748B;">'
+                    f'({height_cm:g} cm · {weight_kg:g} kg)</span></div>',
+                    unsafe_allow_html=True,
+                )
+            else:
+                st.caption("BMI appears when height and weight are entered.")
+
+    with col_risk:
+        with st.container(border=True):
+            st.markdown(
+                '<div class="card-title">Risk Factors</div>'
+                '<div class="card-caption">Lipids, tobacco, ASCVD, and other CV risk context.</div>',
+                unsafe_allow_html=True,
+            )
             ldl_label = st.selectbox(
                 "LDL cholesterol level",
                 list(LDL_UI_TO_VALUE.keys()),
@@ -1553,7 +1603,6 @@ def _patient_form() -> dict:
                 ["Unknown", "never", "former", "current"],
                 help="Tobacco use status for cardiovascular risk context.",
             )
-        with r2:
             ascvd = st.checkbox(
                 "Clinical ASCVD history (MI, stroke, revascularization, etc.)",
                 help="ⓘ Atherosclerotic cardiovascular disease history — prior MI, stroke, CABG/PCI, PAD, etc.",
@@ -1763,45 +1812,45 @@ def main() -> None:
 
     patient_input = _patient_form()
 
-    st.markdown(
-        '<div class="card"><div class="card-title">Clinical query</div>'
-        '<div class="card-caption">Compose a clinician-style question or note. Templates are optional.</div>',
-        unsafe_allow_html=True,
-    )
-    topic = st.selectbox("Template topic", ["All topics"] + list(TOPIC_OPTIONS.keys()))
-    choices = ALL_SAMPLES if topic == "All topics" else ["— Type below instead —"] + TOPIC_OPTIONS[topic]
-    picked = st.selectbox("Ready questions", choices)
-
-    if "question_text" not in st.session_state:
-        st.session_state["question_text"] = (
-            "55-year-old male with BP 138/88, BMI 31, type 2 diabetes, LDL 145, current smoker — "
-            "what preventive and lipid strategies should be considered?"
+    with st.container(border=True):
+        st.markdown(
+            '<div class="card-title">Clinical query</div>'
+            '<div class="card-caption">Compose a clinician-style question or note. Templates are optional.</div>',
+            unsafe_allow_html=True,
         )
+        q_left, q_right = st.columns([1, 2], gap="small")
+        with q_left:
+            topic = st.selectbox("Template topic", ["All topics"] + list(TOPIC_OPTIONS.keys()))
+            choices = ALL_SAMPLES if topic == "All topics" else ["— Type below instead —"] + TOPIC_OPTIONS[topic]
+            picked = st.selectbox("Ready questions", choices)
 
-    if picked != "— Type below instead —":
-        if st.session_state.get("_last_picked") != picked:
-            st.session_state["question_text"] = picked
-            st.session_state["_last_picked"] = picked
-    else:
-        st.session_state["_last_picked"] = picked
+            if "question_text" not in st.session_state:
+                st.session_state["question_text"] = (
+                    "55-year-old male with BP 138/88, BMI 31, type 2 diabetes, LDL 145, current smoker — "
+                    "what preventive and lipid strategies should be considered?"
+                )
 
-    st.text_area(
-        "Clinical question / note",
-        key="question_text",
-        height=128,
-        placeholder="Example: 55-year-old male, BP 138/88, BMI 31, T2DM, LDL 145, current smoker — preventive lipid strategy?",
-    )
+            if picked != "— Type below instead —":
+                if st.session_state.get("_last_picked") != picked:
+                    st.session_state["question_text"] = picked
+                    st.session_state["_last_picked"] = picked
+            else:
+                st.session_state["_last_picked"] = picked
 
-    c1, c2 = st.columns([3, 1], gap="medium")
-    with c1:
-        ask = st.button("Run CDSS workflow", type="primary", use_container_width=True)
-    with c2:
-        also_update = st.checkbox(
-            "Live source check",
-            value=False,
-            help="Runs Knowledge Update URL probes for this run only. Does not mean full live guideline ingestion.",
-        )
-    st.markdown("</div>", unsafe_allow_html=True)
+            also_update = st.checkbox(
+                "Live source check",
+                value=False,
+                help="Runs Knowledge Update URL probes for this run only. Does not mean full live guideline ingestion.",
+            )
+            ask = st.button("Run CDSS workflow", type="primary", use_container_width=True)
+
+        with q_right:
+            st.text_area(
+                "Clinical question / note",
+                key="question_text",
+                height=140,
+                placeholder="Example: 55-year-old male, BP 138/88, BMI 31, T2DM, LDL 145, current smoker — preventive lipid strategy?",
+            )
 
     if ask:
         q = (st.session_state.get("question_text") or "").strip()
@@ -1829,25 +1878,26 @@ def main() -> None:
     conf = float(result.get("confidence") or 0.0)
     total_s = float(timings.get("total_pipeline_s") or 0.0)
 
-    st.markdown(
-        f"""
-        <div class="kpi-grid">
-          <div class="kpi"><div class="label">Confidence</div><div class="value">{conf*100:.0f}%</div><div class="hint">Verification confidence</div></div>
-          <div class="kpi"><div class="label">Evidence retrieved</div><div class="value">{n_chunks}</div><div class="hint">Ranked source chunks</div></div>
-          <div class="kpi"><div class="label">Guidelines</div><div class="value">{n_guidelines}</div><div class="hint">Priority 1 sources</div></div>
-          <div class="kpi"><div class="label">Response time</div><div class="value">{total_s:.2f}s</div><div class="hint">End-to-end pipeline</div></div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    st.caption(f"Query: {st.session_state.get('last_question', '')}")
-    if result.get("needs_human_review"):
-        st.warning("Human review recommended — incomplete data, limited evidence, or source disagreement.")
-
-    modes = evidence_mode_labels(result)
-    st.markdown(provenance_badge_html(modes), unsafe_allow_html=True)
-
-    _render_prediction_summary(result)
+    res_left, res_right = st.columns([1.15, 1], gap="small")
+    with res_left:
+        st.markdown(
+            f"""
+            <div class="kpi-grid">
+              <div class="kpi"><div class="label">Confidence</div><div class="value">{conf*100:.0f}%</div><div class="hint">Verification confidence</div></div>
+              <div class="kpi"><div class="label">Evidence retrieved</div><div class="value">{n_chunks}</div><div class="hint">Ranked source chunks</div></div>
+              <div class="kpi"><div class="label">Guidelines</div><div class="value">{n_guidelines}</div><div class="hint">Priority 1 sources</div></div>
+              <div class="kpi"><div class="label">Response time</div><div class="value">{total_s:.2f}s</div><div class="hint">End-to-end pipeline</div></div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        st.caption(f"Query: {st.session_state.get('last_question', '')}")
+        if result.get("needs_human_review"):
+            st.warning("Human review recommended — incomplete data, limited evidence, or source disagreement.")
+        modes = evidence_mode_labels(result)
+        st.markdown(provenance_badge_html(modes), unsafe_allow_html=True)
+    with res_right:
+        _render_prediction_summary(result)
 
     tabs = st.tabs(
         [
