@@ -240,14 +240,37 @@ html, body, .stApp {
 }
 .app-footer strong { color: var(--navy); font-weight: 700; font-size: 13px; }
 
-/* ===== Sidebar — matches header navy→blue premium system ===== */
+/* ===== Sidebar — dark premium enterprise (never white) ===== */
+section[data-testid="stSidebar"],
+section[data-testid="stSidebar"] > div,
+section[data-testid="stSidebar"] [data-testid="stSidebarContent"],
+section[data-testid="stSidebar"] [data-testid="stSidebarUserContent"],
+section[data-testid="stSidebar"] [data-testid="stVerticalBlock"],
+section[data-testid="stSidebar"] [data-testid="stSidebarHeader"],
+section[data-testid="stSidebar"] [data-testid="stLogoSpacer"],
+section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"],
+section[data-testid="stSidebar"] [data-testid="element-container"],
+section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] {
+  background: transparent !important;
+  background-color: transparent !important;
+}
 section[data-testid="stSidebar"] {
   background:
     radial-gradient(420px 240px at 0% 0%, rgba(34, 211, 238, 0.18), transparent 60%),
     radial-gradient(380px 260px at 100% 8%, rgba(29, 78, 216, 0.35), transparent 55%),
     linear-gradient(180deg, #0F172A 0%, #1E3A8A 48%, #1D4ED8 100%) !important;
-  border-right: 1px solid rgba(34, 211, 238, 0.22);
+  background-color: #0F172A !important;
+  border-right: 1px solid rgba(34, 211, 238, 0.22) !important;
   box-shadow: inset -1px 0 0 rgba(255,255,255,0.04);
+}
+/* Prevent main-area white card rule from painting the sidebar */
+section[data-testid="stSidebar"] [data-testid="stVerticalBlockBorderWrapper"] {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
 }
 section[data-testid="stSidebar"] > div:first-child {
   background: transparent !important;
@@ -255,13 +278,14 @@ section[data-testid="stSidebar"] > div:first-child {
 }
 /* Reduce empty space above Clinical Evidence brand */
 section[data-testid="stSidebar"] [data-testid="stSidebarHeader"] {
-  padding-top: 0.35rem !important;
+  padding-top: 0.2rem !important;
   padding-bottom: 0 !important;
   min-height: 0 !important;
+  height: auto !important;
 }
 section[data-testid="stSidebar"] [data-testid="stSidebarUserContent"],
 section[data-testid="stSidebar"] [data-testid="stSidebarContent"] {
-  padding-top: 0.15rem !important;
+  padding-top: 0.05rem !important;
 }
 .sidebar-shell { padding: 0 2px 8px 2px; }
 .sidebar-brand {
@@ -275,10 +299,14 @@ section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
 section[data-testid="stSidebar"] [data-testid="stCaptionContainer"],
 section[data-testid="stSidebar"] .stCaption {
   color: #E2E8F0 !important;
+  -webkit-text-fill-color: #E2E8F0 !important;
 }
-section[data-testid="stSidebar"] strong { color: #FFFFFF !important; }
+section[data-testid="stSidebar"] strong {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
 section[data-testid="stSidebar"] code {
-  background: rgba(15, 23, 42, 0.35) !important;
+  background: rgba(15, 23, 42, 0.55) !important;
   color: #A5F3FC !important;
   border: 1px solid rgba(34, 211, 238, 0.25) !important;
   border-radius: 6px !important;
@@ -293,12 +321,18 @@ section[data-testid="stSidebar"] code {
   box-shadow: 0 6px 16px rgba(34, 211, 238, 0.28);
 }
 .sidebar-brand .name {
-  font-size: 15px; font-weight: 800; color: #F8FAFC !important; letter-spacing: -0.02em; line-height: 1.2;
+  font-size: 15px; font-weight: 800; color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  letter-spacing: -0.02em; line-height: 1.2;
 }
-.sidebar-brand .role { font-size: 11px; color: #CBD5E1 !important; margin-top: 3px; }
+.sidebar-brand .role {
+  font-size: 11px; color: #E2E8F0 !important;
+  -webkit-text-fill-color: #E2E8F0 !important; margin-top: 3px;
+}
 
 .sidebar-section {
   font-size: 10px; font-weight: 800; color: #A5F3FC !important;
+  -webkit-text-fill-color: #A5F3FC !important;
   text-transform: uppercase; letter-spacing: 0.1em;
   margin: 16px 4px 10px 4px;
 }
@@ -360,28 +394,32 @@ section[data-testid="stSidebar"] div[data-testid="stRadio"] label > div:first-ch
 
 .sidebar-kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 0 8px 0; }
 .sidebar-kpi {
-  background: rgba(15, 23, 42, 0.38);
-  border: 1px solid rgba(34, 211, 238, 0.26);
+  background: rgba(15, 23, 42, 0.72) !important;
+  background-color: rgba(15, 23, 42, 0.72) !important;
+  border: 1px solid rgba(34, 211, 238, 0.32) !important;
   border-radius: 12px;
   padding: 10px 11px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 4px 12px rgba(15, 23, 42, 0.18);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 4px 12px rgba(15, 23, 42, 0.28);
 }
 .sidebar-kpi.wide { grid-column: 1 / -1; }
 .sidebar-kpi .lbl {
   font-size: 9px; font-weight: 800; color: #A5F3FC !important;
+  -webkit-text-fill-color: #A5F3FC !important;
   text-transform: uppercase; letter-spacing: 0.07em;
 }
 .sidebar-kpi .val {
   margin-top: 5px; font-size: 20px; font-weight: 800; color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
   letter-spacing: -0.02em; line-height: 1.15; word-break: break-word;
 }
-.sidebar-kpi .val.sm { font-size: 12px; font-weight: 700; color: #E0F2FE !important; }
+.sidebar-kpi .val.sm { font-size: 12px; font-weight: 700; color: #E0F2FE !important; -webkit-text-fill-color: #E0F2FE !important; }
 
 .sidebar-mode {
-  font-size: 12px; color: #E2E8F0 !important; font-weight: 500;
+  font-size: 12px; color: #E2E8F0 !important; -webkit-text-fill-color: #E2E8F0 !important; font-weight: 500;
   padding: 8px 10px; margin-bottom: 6px; border-radius: 10px;
-  background: rgba(15, 23, 42, 0.22);
-  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(15, 23, 42, 0.55) !important;
+  background-color: rgba(15, 23, 42, 0.55) !important;
+  border: 1px solid rgba(148, 163, 184, 0.28) !important;
 }
 
 section[data-testid="stSidebar"] .stButton > button {
@@ -414,13 +452,40 @@ section[data-testid="stSidebar"] .stSuccess {
   border: 1px solid rgba(74, 222, 128, 0.35) !important;
 }
 
-/* ===== Form controls — high contrast, readable ===== */
+/* ===== Form controls — full 4-sided rectangle borders ===== */
+/* Streamlit BaseWeb often draws only top/left/right; force a closed box on the wrapper */
+div[data-baseweb="input"],
+[data-testid="stTextInput"] div[data-baseweb="input"],
+[data-testid="stNumberInput"] div[data-baseweb="input"] {
+  background: #FFFFFF !important;
+  border-style: solid !important;
+  border-width: 1px !important;
+  border-color: #94A3B8 !important;
+  border-top: 1px solid #94A3B8 !important;
+  border-right: 1px solid #94A3B8 !important;
+  border-bottom: 1px solid #94A3B8 !important;
+  border-left: 1px solid #94A3B8 !important;
+  border-radius: 12px !important;
+  overflow: visible !important;
+  box-shadow: none !important;
+}
+div[data-baseweb="base-input"] {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
 .stTextInput input, .stNumberInput input, .stTextArea textarea,
 [data-testid="stTextInput"] input,
 [data-testid="stNumberInput"] input,
 [data-testid="stTextArea"] textarea {
   border-radius: 12px !important;
-  border: 1px solid var(--border-strong) !important;
+  border-style: solid !important;
+  border-width: 1px !important;
+  border-color: #94A3B8 !important;
+  border-top: 1px solid #94A3B8 !important;
+  border-right: 1px solid #94A3B8 !important;
+  border-bottom: 1px solid #94A3B8 !important;
+  border-left: 1px solid #94A3B8 !important;
   background: #FFFFFF !important;
   color: #0F172A !important;
   -webkit-text-fill-color: #0F172A !important;
@@ -428,7 +493,17 @@ section[data-testid="stSidebar"] .stSuccess {
   min-height: 44px !important;
   font-size: 15px !important;
   font-weight: 600 !important;
+  /* inset ring closes the rectangle even if Streamlit zeros border-bottom */
+  box-shadow: inset 0 0 0 1px #94A3B8 !important;
+  outline: none !important;
+}
+/* Avoid double border when BaseWeb wrapper already draws the rectangle */
+div[data-baseweb="input"] input {
+  border: none !important;
+  border-width: 0 !important;
   box-shadow: none !important;
+  background: transparent !important;
+  min-height: 42px !important;
 }
 .stTextInput input::placeholder, .stTextArea textarea::placeholder {
   color: #64748B !important;
@@ -440,7 +515,15 @@ section[data-testid="stSidebar"] .stSuccess {
 [data-testid="stNumberInput"] input:focus,
 [data-testid="stTextArea"] textarea:focus {
   border-color: #1D4ED8 !important;
+  box-shadow: inset 0 0 0 1px #1D4ED8, 0 0 0 2px rgba(29,78,216,0.15) !important;
+}
+div[data-baseweb="input"]:focus-within {
+  border-color: #1D4ED8 !important;
   box-shadow: 0 0 0 2px rgba(29,78,216,0.15) !important;
+}
+div[data-baseweb="input"]:focus-within input {
+  border: none !important;
+  box-shadow: none !important;
 }
 .stTextArea textarea { min-height: 120px !important; }
 
@@ -855,17 +938,21 @@ div[data-testid="stVerticalBlock"] > div[data-testid="element-container"] {
 }
 
 .sidebar-kpi {
-  border: 1px solid rgba(148, 163, 184, 0.45) !important;
+  background: rgba(15, 23, 42, 0.72) !important;
+  border: 1px solid rgba(34, 211, 238, 0.35) !important;
 }
 .sidebar-mode {
+  background: rgba(15, 23, 42, 0.55) !important;
   border: 1px solid rgba(148, 163, 184, 0.35) !important;
 }
 section[data-testid="stSidebar"] .stButton > button {
   border: 1px solid rgba(34, 211, 238, 0.55) !important;
-  box-shadow: none !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
 section[data-testid="stSidebar"] div[data-testid="stExpander"] {
   border: 1px solid rgba(148, 163, 184, 0.45) !important;
+  background: rgba(15, 23, 42, 0.45) !important;
 }
 
 /* Bordered section containers — wrap heading + all related inputs */
@@ -876,19 +963,49 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
   padding: 18px 20px 22px 20px !important;
   margin-bottom: 18px !important;
   box-shadow: none !important;
+  overflow: visible !important;
+}
+/* Sidebar must stay dark — override the white card wrapper above */
+section[data-testid="stSidebar"] div[data-testid="stVerticalBlockBorderWrapper"] {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
 }
 div[data-testid="stVerticalBlockBorderWrapper"] > div {
   gap: 0.55rem !important;
+  overflow: visible !important;
 }
 /* Full 4-sided borders on text inputs / number inputs inside cards */
+div[data-testid="stVerticalBlockBorderWrapper"] div[data-baseweb="input"] {
+  border-style: solid !important;
+  border-width: 1px !important;
+  border-color: #94A3B8 !important;
+  border-top: 1px solid #94A3B8 !important;
+  border-right: 1px solid #94A3B8 !important;
+  border-bottom: 1px solid #94A3B8 !important;
+  border-left: 1px solid #94A3B8 !important;
+  border-radius: 12px !important;
+  background: #FFFFFF !important;
+}
 div[data-testid="stVerticalBlockBorderWrapper"] .stTextInput input,
 div[data-testid="stVerticalBlockBorderWrapper"] .stNumberInput input,
 div[data-testid="stVerticalBlockBorderWrapper"] .stTextArea textarea,
 div[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stTextInput"] input {
-  border: 1px solid var(--border-strong) !important;
-  border-bottom: 1px solid var(--border-strong) !important;
+  border-style: solid !important;
+  border-width: 1px !important;
+  border-color: #94A3B8 !important;
+  border-bottom: 1px solid #94A3B8 !important;
   border-radius: 12px !important;
+  box-shadow: inset 0 0 0 1px #94A3B8 !important;
+}
+div[data-testid="stVerticalBlockBorderWrapper"] div[data-baseweb="input"] input {
+  border: none !important;
+  border-width: 0 !important;
   box-shadow: none !important;
+  background: transparent !important;
 }
 div[data-testid="stVerticalBlockBorderWrapper"] .stSelectbox div[data-baseweb="select"] > div,
 div[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stSelectbox"] div[data-baseweb="select"] > div {
@@ -897,7 +1014,9 @@ div[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stSelectbox"] div[
   border-radius: 12px !important;
 }
 
-div[data-testid="stRadio"] label {
+/* Main-area radios only — do not wipe sidebar nav styling */
+section.main div[data-testid="stRadio"] label,
+div[data-testid="stMainBlockContainer"] div[data-testid="stRadio"] label {
   border: 1px solid var(--border-strong);
   border-radius: 10px;
   padding: 8px 10px;
@@ -905,13 +1024,18 @@ div[data-testid="stRadio"] label {
 }
 section[data-testid="stSidebar"] div[data-testid="stRadio"] label {
   border: 1px solid rgba(148, 163, 184, 0.35) !important;
-  background: rgba(15, 23, 42, 0.22) !important;
+  background: rgba(15, 23, 42, 0.42) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
 section[data-testid="stSidebar"] div[data-testid="stRadio"] label * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
+}
+section[data-testid="stSidebar"] div[data-testid="stRadio"] label:has(input:checked),
+section[data-testid="stSidebar"] div[data-testid="stRadio"] label[data-checked="true"] {
+  background: linear-gradient(135deg, rgba(29, 78, 216, 0.62), rgba(34, 211, 238, 0.24)) !important;
+  border: 1px solid rgba(34, 211, 238, 0.70) !important;
 }
 </style>
 """
