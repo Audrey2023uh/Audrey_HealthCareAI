@@ -285,13 +285,6 @@ section[data-testid="stSidebar"] code {
   font-size: 11px !important;
 }
 
-.sidebar-shell { padding: 4px 2px 8px 2px; }
-.sidebar-brand {
-  display: flex; gap: 12px; align-items: center;
-  padding: 10px 10px 16px 10px;
-  margin-bottom: 14px;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.25);
-}
 .sidebar-brand .mark {
   width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
   background: linear-gradient(145deg, #22D3EE, #1D4ED8);
