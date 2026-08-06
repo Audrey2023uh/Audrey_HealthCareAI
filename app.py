@@ -251,7 +251,25 @@ section[data-testid="stSidebar"] {
 }
 section[data-testid="stSidebar"] > div:first-child {
   background: transparent !important;
-  padding-top: 12px !important;
+  padding-top: 0 !important;
+}
+/* Reduce empty space above Clinical Evidence brand */
+section[data-testid="stSidebar"] [data-testid="stSidebarHeader"] {
+  padding-top: 0.35rem !important;
+  padding-bottom: 0 !important;
+  min-height: 0 !important;
+}
+section[data-testid="stSidebar"] [data-testid="stSidebarUserContent"],
+section[data-testid="stSidebar"] [data-testid="stSidebarContent"] {
+  padding-top: 0.15rem !important;
+}
+.sidebar-shell { padding: 0 2px 8px 2px; }
+.sidebar-brand {
+  display: flex; gap: 12px; align-items: center;
+  padding: 2px 10px 14px 10px;
+  margin-top: 0;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.25);
 }
 section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
 section[data-testid="stSidebar"] [data-testid="stCaptionContainer"],
@@ -308,7 +326,8 @@ section[data-testid="stSidebar"] div[data-testid="stRadio"] label {
   border-radius: 12px !important;
   padding: 11px 14px !important;
   margin: 0 !important;
-  color: #E2E8F0 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
   font-weight: 600 !important;
   font-size: 13px !important;
   transition: background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease !important;
@@ -323,15 +342,23 @@ section[data-testid="stSidebar"] div[data-testid="stRadio"] label[data-checked="
   background: linear-gradient(135deg, rgba(29, 78, 216, 0.62), rgba(34, 211, 238, 0.24)) !important;
   border: 1px solid rgba(34, 211, 238, 0.70) !important;
   color: #ECFEFF !important;
+  -webkit-text-fill-color: #ECFEFF !important;
   font-weight: 700 !important;
   box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.28), 0 8px 22px rgba(15, 23, 42, 0.28) !important;
 }
-section[data-testid="stSidebar"] div[data-testid="stRadio"] label span {
-  color: inherit !important;
+section[data-testid="stSidebar"] div[data-testid="stRadio"] label span,
+section[data-testid="stSidebar"] div[data-testid="stRadio"] label p,
+section[data-testid="stSidebar"] div[data-testid="stRadio"] label div,
+section[data-testid="stSidebar"] div[data-testid="stRadio"] label [data-testid="stMarkdownContainer"],
+section[data-testid="stSidebar"] div[data-testid="stRadio"] label [data-testid="stMarkdownContainer"] p {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
-section[data-testid="stSidebar"] div[data-testid="stRadio"] svg,
-section[data-testid="stSidebar"] div[data-testid="stRadio"] [data-testid="stMarkdownContainer"] p {
-  color: inherit !important;
+section[data-testid="stSidebar"] div[data-testid="stRadio"] label:has(input:checked) span,
+section[data-testid="stSidebar"] div[data-testid="stRadio"] label:has(input:checked) p,
+section[data-testid="stSidebar"] div[data-testid="stRadio"] label:has(input:checked) [data-testid="stMarkdownContainer"] p {
+  color: #ECFEFF !important;
+  -webkit-text-fill-color: #ECFEFF !important;
 }
 /* Hide default radio circles for a button look */
 section[data-testid="stSidebar"] div[data-testid="stRadio"] label > div:first-child {
@@ -848,6 +875,35 @@ section[data-testid="stSidebar"] div[data-testid="stExpander"] {
   border: 1px solid rgba(148, 163, 184, 0.45) !important;
 }
 
+/* Bordered section containers — wrap heading + all related inputs */
+div[data-testid="stVerticalBlockBorderWrapper"] {
+  background: #FFFFFF !important;
+  border: 1px solid var(--border-strong) !important;
+  border-radius: 16px !important;
+  padding: 18px 20px 22px 20px !important;
+  margin-bottom: 18px !important;
+  box-shadow: none !important;
+}
+div[data-testid="stVerticalBlockBorderWrapper"] > div {
+  gap: 0.55rem !important;
+}
+/* Full 4-sided borders on text inputs / number inputs inside cards */
+div[data-testid="stVerticalBlockBorderWrapper"] .stTextInput input,
+div[data-testid="stVerticalBlockBorderWrapper"] .stNumberInput input,
+div[data-testid="stVerticalBlockBorderWrapper"] .stTextArea textarea,
+div[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stTextInput"] input {
+  border: 1px solid var(--border-strong) !important;
+  border-bottom: 1px solid var(--border-strong) !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+}
+div[data-testid="stVerticalBlockBorderWrapper"] .stSelectbox div[data-baseweb="select"] > div,
+div[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stSelectbox"] div[data-baseweb="select"] > div {
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  outline: 1px solid rgba(15, 23, 42, 0.14) !important;
+  border-radius: 12px !important;
+}
+
 div[data-testid="stRadio"] label {
   border: 1px solid var(--border-strong);
   border-radius: 10px;
@@ -855,8 +911,14 @@ div[data-testid="stRadio"] label {
   background: #FFFFFF;
 }
 section[data-testid="stSidebar"] div[data-testid="stRadio"] label {
-  border: 1px solid rgba(148, 163, 184, 0.35);
-  background: rgba(15, 23, 42, 0.22);
+  border: 1px solid rgba(148, 163, 184, 0.35) !important;
+  background: rgba(15, 23, 42, 0.22) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+section[data-testid="stSidebar"] div[data-testid="stRadio"] label * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
 </style>
 """
@@ -1281,111 +1343,109 @@ LDL_UI_TO_VALUE = {
 
 def _patient_form() -> dict:
     """UI-only patient intake. Returns the same patient_input keys the pipeline expects."""
-    # ----- Patient Information -----
-    st.markdown(
-        '<div class="card"><div class="card-title">Patient Information</div>'
-        '<div class="card-caption">Demographics used for context. Leave blank or Unknown when unavailable.</div>',
-        unsafe_allow_html=True,
-    )
-    p1, p2, p3 = st.columns(3, gap="medium")
-    with p1:
-        age_raw = st.text_input(
-            "Age (years)",
-            value="",
-            placeholder="Leave blank if unavailable",
-            help="Patient age in years. Used for prevention age windows and risk context.",
-        )
-    with p2:
-        sex_label = st.selectbox(
-            "Sex",
-            list(SEX_UI_TO_CODE.keys()),
-            help="Select the patient sex category used for clinical context.",
-        )
-    with p3:
-        diabetes_label = st.selectbox(
-            "Diabetes status",
-            list(DIABETES_UI_TO_CODE.keys()),
-            help="Select the clearest diabetes category: none, prediabetes, type 1, or type 2.",
-        )
-    st.markdown("</div>", unsafe_allow_html=True)
-
-    # ----- Vital Signs -----
-    st.markdown(
-        '<div class="card"><div class="card-title">Vital Signs</div>'
-        '<div class="card-caption">Enter measured values when known. BMI is calculated from height and weight.</div>',
-        unsafe_allow_html=True,
-    )
-    v1, v2, v3, v4 = st.columns(4, gap="medium")
-    with v1:
-        sbp_label = st.selectbox(
-            "Systolic blood pressure (top number)",
-            list(SBP_UI_TO_VALUE.keys()),
-            help="ⓘ SBP is the top number in a blood pressure reading. Choose Normal, Elevated, High, or Critical.",
-        )
-    with v2:
-        dbp_raw = st.text_input(
-            "DBP (mm Hg)",
-            value="",
-            placeholder="Unknown",
-            help="ⓘ Diastolic blood pressure — bottom number in a BP reading (mm Hg).",
-        )
-    with v3:
-        height_raw = st.text_input(
-            "Height (cm)",
-            value="",
-            placeholder="e.g., 170",
-            help="ⓘ Height in centimeters. Used with weight to calculate BMI automatically.",
-        )
-    with v4:
-        weight_raw = st.text_input(
-            "Weight (kg)",
-            value="",
-            placeholder="e.g., 75",
-            help="ⓘ Weight in kilograms. Used with height to calculate BMI automatically.",
-        )
-
-    height_cm = _parse_optional_float(height_raw)
-    weight_kg = _parse_optional_float(weight_raw)
-    bmi = _calc_bmi(height_cm, weight_kg)
-    if bmi is not None:
+    # Real Streamlit bordered containers so inputs render INSIDE the card border.
+    with st.container(border=True):
         st.markdown(
-            f'<div class="bmi-live">Calculated BMI: <strong>{bmi}</strong> '
-            f'<span style="font-weight:500;color:#64748B;">(from height {height_cm:g} cm · weight {weight_kg:g} kg)</span></div>',
+            '<div class="card-title">Patient Information</div>'
+            '<div class="card-caption">Demographics used for context. Leave blank or Unknown when unavailable.</div>',
             unsafe_allow_html=True,
         )
-    else:
-        st.caption("BMI will appear here once both height and weight are entered.")
-    st.markdown("</div>", unsafe_allow_html=True)
+        p1, p2, p3 = st.columns(3, gap="medium")
+        with p1:
+            age_raw = st.text_input(
+                "Age (years)",
+                value="",
+                placeholder="Leave blank if unavailable",
+                help="Patient age in years. Used for prevention age windows and risk context.",
+            )
+        with p2:
+            sex_label = st.selectbox(
+                "Sex",
+                list(SEX_UI_TO_CODE.keys()),
+                help="Select the patient sex category used for clinical context.",
+            )
+        with p3:
+            diabetes_label = st.selectbox(
+                "Diabetes status",
+                list(DIABETES_UI_TO_CODE.keys()),
+                help="Select the clearest diabetes category: none, prediabetes, type 1, or type 2.",
+            )
 
-    # ----- Risk Factors -----
-    st.markdown(
-        '<div class="card"><div class="card-title">Risk Factors</div>'
-        '<div class="card-caption">Lipids, tobacco, ASCVD history, and other cardiovascular risk context.</div>',
-        unsafe_allow_html=True,
-    )
-    r1, r2 = st.columns(2, gap="medium")
-    with r1:
-        ldl_label = st.selectbox(
-            "LDL cholesterol level",
-            list(LDL_UI_TO_VALUE.keys()),
-            help="ⓘ LDL is “bad” cholesterol. Choose Optimal, Borderline high, High, or Critical / Very high.",
+    with st.container(border=True):
+        st.markdown(
+            '<div class="card-title">Vital Signs</div>'
+            '<div class="card-caption">Enter measured values when known. BMI is calculated from height and weight.</div>',
+            unsafe_allow_html=True,
         )
-        smoking = st.selectbox(
-            "Smoking",
-            ["Unknown", "never", "former", "current"],
-            help="Tobacco use status for cardiovascular risk context.",
+        v1, v2, v3, v4 = st.columns(4, gap="medium")
+        with v1:
+            sbp_label = st.selectbox(
+                "Systolic blood pressure (top number)",
+                list(SBP_UI_TO_VALUE.keys()),
+                help="ⓘ SBP is the top number in a blood pressure reading. Choose Normal, Elevated, High, or Critical.",
+            )
+        with v2:
+            dbp_raw = st.text_input(
+                "DBP (mm Hg)",
+                value="",
+                placeholder="Unknown",
+                help="ⓘ Diastolic blood pressure — bottom number in a BP reading (mm Hg).",
+            )
+        with v3:
+            height_raw = st.text_input(
+                "Height (cm)",
+                value="",
+                placeholder="e.g., 170",
+                help="ⓘ Height in centimeters. Used with weight to calculate BMI automatically.",
+            )
+        with v4:
+            weight_raw = st.text_input(
+                "Weight (kg)",
+                value="",
+                placeholder="e.g., 75",
+                help="ⓘ Weight in kilograms. Used with height to calculate BMI automatically.",
+            )
+
+        height_cm = _parse_optional_float(height_raw)
+        weight_kg = _parse_optional_float(weight_raw)
+        bmi = _calc_bmi(height_cm, weight_kg)
+        if bmi is not None:
+            st.markdown(
+                f'<div class="bmi-live">Calculated BMI: <strong>{bmi}</strong> '
+                f'<span style="font-weight:500;color:#64748B;">(from height {height_cm:g} cm · weight {weight_kg:g} kg)</span></div>',
+                unsafe_allow_html=True,
+            )
+        else:
+            st.caption("BMI will appear here once both height and weight are entered.")
+
+    with st.container(border=True):
+        st.markdown(
+            '<div class="card-title">Risk Factors</div>'
+            '<div class="card-caption">Lipids, tobacco, ASCVD history, and other cardiovascular risk context.</div>',
+            unsafe_allow_html=True,
         )
-    with r2:
-        ascvd = st.checkbox(
-            "Clinical ASCVD history (MI, stroke, revascularization, etc.)",
-            help="ⓘ Atherosclerotic cardiovascular disease history — prior MI, stroke, CABG/PCI, PAD, etc.",
-        )
-        other = st.text_input(
-            "Other CV risk factors (comma-separated)",
-            placeholder="e.g., CKD, family history",
-            help="Additional cardiovascular risk factors not captured above.",
-        )
-    st.markdown("</div>", unsafe_allow_html=True)
+        r1, r2 = st.columns(2, gap="medium")
+        with r1:
+            ldl_label = st.selectbox(
+                "LDL cholesterol level",
+                list(LDL_UI_TO_VALUE.keys()),
+                help="ⓘ LDL is “bad” cholesterol. Choose Optimal, Borderline high, High, or Critical / Very high.",
+            )
+            smoking = st.selectbox(
+                "Smoking",
+                ["Unknown", "never", "former", "current"],
+                help="Tobacco use status for cardiovascular risk context.",
+            )
+        with r2:
+            ascvd = st.checkbox(
+                "Clinical ASCVD history (MI, stroke, revascularization, etc.)",
+                help="ⓘ Atherosclerotic cardiovascular disease history — prior MI, stroke, CABG/PCI, PAD, etc.",
+            )
+            other = st.text_input(
+                "Other CV risk factors (comma-separated)",
+                placeholder="e.g., CKD, family history",
+                help="Additional cardiovascular risk factors not captured above.",
+            )
 
     return {
         "age": _parse_optional_int(age_raw),
