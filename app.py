@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.config import APP_DISCLAIMER, TOP_K, llm_configured
+from src.config import APP_DISCLAIMER, TOP_K, llm_configured, provider_label_for_ui
 
 st.set_page_config(
     page_title="Clinical Evidence CDSS",
@@ -902,10 +902,16 @@ def sort_hits_for_display(docs: list[dict]) -> list[dict]:
 def evidence_mode_labels(result: dict | None = None) -> dict[str, bool]:
     ku = (result or {}).get("knowledge_update") or {}
     live_probe = bool(ku) and not ku.get("skipped", True)
+    mode = (result or {}).get("generation_mode")
+    if mode is None and result:
+        mode = ((result or {}).get("transparency") or {}).get("generation_mode")
+    offline = mode == "offline_fallback" if mode else (not llm_configured())
+    openrouter = mode == "openrouter_free"
     return {
         "indexed": True,
         "cached": True,
-        "offline": not llm_configured(),
+        "offline": offline,
+        "openrouter": openrouter,
         "live": live_probe,
     }
 
@@ -914,8 +920,10 @@ def provenance_badge_html(modes: dict[str, bool]) -> str:
     bits = ['<span class="badge badge-indexed">Indexed evidence</span>']
     if modes.get("cached"):
         bits.append('<span class="badge badge-cached">Cached index</span>')
-    if modes.get("offline"):
-        bits.append('<span class="badge badge-offline">Offline fallback</span>')
+    if modes.get("openrouter"):
+        bits.append('<span class="badge badge-live">OpenRouter Free</span>')
+    elif modes.get("offline"):
+        bits.append('<span class="badge badge-offline">Offline Fallback</span>')
     if modes.get("live"):
         bits.append('<span class="badge badge-live">Live source check</span>')
     else:
@@ -1342,7 +1350,7 @@ def main() -> None:
             index_ok = False
             index_err = str(exc)
 
-        llm_label = "Configured" if llm_configured() else "Offline Fallback"
+        llm_label = provider_label_for_ui()
 
         st.markdown(
             """
@@ -1381,7 +1389,8 @@ def main() -> None:
               <div class="sidebar-section">Evidence modes</div>
               <div class="sidebar-mode">Indexed · local FAISS knowledge base</div>
               <div class="sidebar-mode">Cached · session / local index</div>
-              <div class="sidebar-mode">Offline fallback · no LLM key</div>
+              <div class="sidebar-mode">OpenRouter Free · when secrets key is set</div>
+              <div class="sidebar-mode">Offline Fallback · if key missing or API fails</div>
               <div class="sidebar-mode">Live source check · URL probe when enabled</div>
 
               <div class="sidebar-section">Maintenance</div>
@@ -1652,7 +1661,12 @@ def main() -> None:
     with tabs[6]:
         st.markdown('<div class="card"><div class="card-title">Transparency</div>', unsafe_allow_html=True)
         tr = result.get("transparency") or {}
+        gen_mode = result.get("generation_mode") or tr.get("generation_mode")
         st.metric("Confidence", f"{tr.get('confidence', result.get('confidence', 0)):.2f}")
+        st.write(
+            "**LLM provider:**",
+            tr.get("llm_provider") or provider_label_for_ui(gen_mode),
+        )
         st.write("**Human review recommended:**", tr.get("needs_human_review", result.get("needs_human_review")))
         st.write("**Evidence hierarchy:**", tr.get("evidence_hierarchy") or result.get("ranking_policy"))
         st.markdown(provenance_badge_html(modes), unsafe_allow_html=True)

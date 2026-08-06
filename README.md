@@ -11,6 +11,20 @@
 
 ### Streamlit Cloud API keys (required for LLM mode)
 
+**Where to paste secrets (never commit keys to GitHub):**
+
+1. Open your live app  
+2. Click **Manage app** (bottom-right)  
+3. Click **⋮** → **Settings** → **Secrets**  
+4. Paste:
+
+```toml
+OPENROUTER_API_KEY = "your-openrouter-key"
+OPENROUTER_MODEL = "openrouter/free"
+```
+
+5. **Save** → **Reboot app**
+
 **Important — if the app stays on “Your app is in the oven”:**
 
 1. Open the app → **Manage app** → **⋮** → **Settings**
@@ -18,27 +32,7 @@
 3. **Save** → **Reboot app**
 4. Wait 3–5 minutes
 
-If the app shows **Offline fallback**, add secrets in Streamlit:
-
-1. Open your app on Streamlit Cloud → **⋮** (Manage app) → **Settings** → **Secrets**
-2. Paste:
-
-```toml
-OPENAI_API_KEY = "sk-or-v1-YOUR_REAL_KEY"
-OPENAI_BASE_URL = "https://openrouter.ai/api/v1"
-OPENAI_MODEL = "openai/gpt-4o-mini"
-```
-
-For a direct OpenAI key instead:
-
-```toml
-OPENAI_API_KEY = "sk-YOUR_OPENAI_KEY"
-OPENAI_BASE_URL = "https://api.openai.com/v1"
-OPENAI_MODEL = "gpt-4o-mini"
-```
-
-3. Click **Save**, then reboot the app.
-4. Sidebar **LLM** should say **Configured** (not Offline Fallback).
+Sidebar **LLM** shows **OpenRouter Free** when the online model is used, and **Offline Fallback** only when extractive fallback is used.
 
 ---
 
