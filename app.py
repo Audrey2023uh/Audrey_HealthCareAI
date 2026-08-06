@@ -56,8 +56,9 @@ PREMIUM_CSS = """
   --text: #0F172A;
   --muted: #64748B;
   --soft: #F1F5F9;
-  --shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 10px 28px rgba(15, 23, 42, 0.06);
+  --shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px rgba(15, 23, 42, 0.07);
   --shadow-lg: 0 8px 30px rgba(15, 23, 42, 0.10);
+  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04), 0 6px 18px rgba(15, 23, 42, 0.06);
   --radius: 16px;
 }
 
@@ -179,24 +180,43 @@ section.main [data-testid="stHorizontalBlock"] {
 
 .disclaimer {
   background: #FFFBEB; border: 1px solid #F59E0B; border-left: 4px solid var(--warning);
-  border-radius: 10px; padding: 8px 14px; margin-bottom: 10px;
-  font-size: 12.5px; color: #92400E; line-height: 1.4; font-weight: 500;
+  border-radius: 12px; padding: 10px 16px; margin-bottom: 10px;
+  font-size: 13.5px; color: #92400E; line-height: 1.45; font-weight: 500;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
 }
 
-/* ===== Cards ===== */
+/* ===== Cards — premium main-content polish ===== */
 .card {
   background: var(--card);
   border: 1px solid var(--border-strong);
-  border-radius: 14px;
-  padding: 14px 16px;
+  border-radius: 16px;
+  padding: 18px 20px;
   margin-bottom: 10px;
-  box-shadow: none;
+  box-shadow: var(--shadow-card);
 }
 .card-title {
-  margin: 0 0 2px 0; font-size: 16px; font-weight: 700; color: var(--navy); letter-spacing: -0.02em;
+  margin: 0 0 4px 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--navy);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  padding-left: 10px;
+  border-left: 3px solid var(--blue);
 }
-.card-title.sm { font-size: 14px; font-weight: 700; }
-.card-caption { margin: 0 0 8px 0; font-size: 12px; color: var(--muted); line-height: 1.4; }
+.card-title.sm {
+  font-size: 16px;
+  font-weight: 800;
+  padding-left: 8px;
+  border-left-width: 3px;
+}
+.card-caption {
+  margin: 0 0 10px 0;
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.45;
+  font-weight: 500;
+}
 
 /* ===== KPI ===== */
 .kpi-grid {
@@ -210,9 +230,9 @@ section.main [data-testid="stHorizontalBlock"] {
 .kpi {
   background: var(--card);
   border: 1px solid var(--border-strong);
-  border-radius: 12px;
-  padding: 12px 14px 10px 14px;
-  box-shadow: none;
+  border-radius: 14px;
+  padding: 14px 16px 12px 16px;
+  box-shadow: var(--shadow-card);
   position: relative;
   overflow: hidden;
 }
@@ -221,14 +241,14 @@ section.main [data-testid="stHorizontalBlock"] {
   background: linear-gradient(180deg, var(--cyan), var(--blue));
 }
 .kpi .label {
-  font-size: 10px; font-weight: 700; color: var(--muted);
+  font-size: 11.5px; font-weight: 700; color: var(--muted);
   text-transform: uppercase; letter-spacing: 0.06em; padding-left: 8px;
 }
 .kpi .value {
-  margin-top: 4px; font-size: 24px; font-weight: 800; color: var(--navy);
+  margin-top: 4px; font-size: 26px; font-weight: 800; color: var(--navy);
   letter-spacing: -0.03em; line-height: 1.1; padding-left: 8px;
 }
-.kpi .hint { margin-top: 4px; font-size: 11px; color: var(--muted); padding-left: 8px; }
+.kpi .hint { margin-top: 4px; font-size: 12.5px; color: var(--muted); padding-left: 8px; }
 
 /* ===== Evidence tiles ===== */
 .ev-grid {
@@ -243,30 +263,30 @@ section.main [data-testid="stHorizontalBlock"] {
   border-radius: 16px;
   padding: 18px 18px 16px 18px;
   min-height: 170px;
-  box-shadow: none;
+  box-shadow: var(--shadow-card);
   border-top: 4px solid var(--accent, var(--blue));
 }
 .ev-tile.featured {
   border: 1px solid #1D4ED8;
   border-top: 4px solid var(--blue);
   background: linear-gradient(180deg, #EFF6FF 0%, #FFFFFF 55%);
-  box-shadow: none;
+  box-shadow: var(--shadow-card);
 }
 .ev-tile h4 {
-  margin: 0 0 10px 0; font-size: 15px; font-weight: 700; color: var(--navy);
+  margin: 0 0 10px 0; font-size: 16.5px; font-weight: 800; color: var(--navy);
 }
-.ev-tile .org { font-size: 13px; color: #334155; line-height: 1.45; font-weight: 500; }
-.ev-tile .meta { margin-top: 12px; font-size: 12px; font-weight: 700; color: var(--muted); }
-.ev-tile .empty { font-size: 13px; color: var(--muted); }
+.ev-tile .org { font-size: 14.5px; color: #334155; line-height: 1.45; font-weight: 500; }
+.ev-tile .meta { margin-top: 12px; font-size: 13.5px; font-weight: 700; color: var(--muted); }
+.ev-tile .empty { font-size: 14.5px; color: var(--muted); }
 
 .source-card {
-  background: var(--card); border: 1px solid var(--border-strong); border-radius: 14px;
-  padding: 16px 18px; margin-bottom: 12px; box-shadow: none;
+  background: var(--card); border: 1px solid var(--border-strong); border-radius: 16px;
+  padding: 16px 18px; margin-bottom: 12px; box-shadow: var(--shadow-card);
 }
 .source-card.alt { background: #F8FAFC; }
-.source-card .title { font-size: 15px; font-weight: 700; color: var(--navy); margin: 0 0 8px 0; }
-.source-card .meta { font-size: 13px; color: var(--muted); line-height: 1.55; }
-.source-card a { color: var(--blue); font-weight: 600; text-decoration: none; font-size: 13px; }
+.source-card .title { font-size: 16.5px; font-weight: 800; color: var(--navy); margin: 0 0 8px 0; }
+.source-card .meta { font-size: 14.5px; color: var(--muted); line-height: 1.55; }
+.source-card a { color: var(--blue); font-weight: 600; text-decoration: none; font-size: 14.5px; }
 .source-card a:hover { text-decoration: underline; }
 
 .badge {
@@ -279,11 +299,12 @@ section.main [data-testid="stHorizontalBlock"] {
 .badge-live { background: #ECFDF5; color: #166534; border: 1px solid #BBF7D0; }
 
 .rec-item {
-  border: 1px solid var(--border-strong); border-radius: 14px; padding: 14px 16px;
+  border: 1px solid var(--border-strong); border-radius: 16px; padding: 16px 18px;
   margin-bottom: 10px; background: linear-gradient(180deg, #FFFFFF, #F8FAFC);
+  box-shadow: var(--shadow-card);
 }
-.rec-item .body { font-size: 14px; color: var(--text); line-height: 1.55; font-weight: 500; }
-.rec-item .meta { margin-top: 8px; font-size: 12px; color: var(--muted); }
+.rec-item .body { font-size: 15.5px; color: var(--text); line-height: 1.55; font-weight: 500; }
+.rec-item .meta { margin-top: 8px; font-size: 13.5px; color: var(--muted); }
 
 .app-footer {
   margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border);
@@ -520,7 +541,7 @@ div[data-baseweb="input"],
   border-right: 1px solid #94A3B8 !important;
   border-bottom: 1px solid #94A3B8 !important;
   border-left: 1px solid #94A3B8 !important;
-  border-radius: 12px !important;
+  border-radius: 14px !important;
   overflow: visible !important;
   box-shadow: none !important;
 }
@@ -533,7 +554,7 @@ div[data-baseweb="base-input"] {
 [data-testid="stTextInput"] input,
 [data-testid="stNumberInput"] input,
 [data-testid="stTextArea"] textarea {
-  border-radius: 12px !important;
+  border-radius: 14px !important;
   border-style: solid !important;
   border-width: 1px !important;
   border-color: #94A3B8 !important;
@@ -545,8 +566,8 @@ div[data-baseweb="base-input"] {
   color: #0F172A !important;
   -webkit-text-fill-color: #0F172A !important;
   caret-color: #0F172A !important;
-  min-height: 38px !important;
-  font-size: 14px !important;
+  min-height: 42px !important;
+  font-size: 15.5px !important;
   font-weight: 600 !important;
   /* inset ring closes the rectangle even if Streamlit zeros border-bottom */
   box-shadow: inset 0 0 0 1px #94A3B8 !important;
@@ -589,11 +610,12 @@ div[data-baseweb="select"] > div,
   background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 55%, #1D4ED8 100%) !important;
   color: #FFFFFF !important;
   border: 1px solid rgba(255, 255, 255, 0.35) !important;
-  border-radius: 16px !important;
-  min-height: 40px !important;
+  border-radius: 14px !important;
+  min-height: 42px !important;
   padding-left: 12px !important;
   padding-right: 10px !important;
-  font-size: 14px !important;
+  font-size: 15.5px !important;
+  font-weight: 600 !important;
   font-weight: 600 !important;
   letter-spacing: -0.01em !important;
   box-shadow: none !important;
@@ -690,9 +712,8 @@ li[role="option"],
   background: #FFFFFF !important;
   color: #0F172A !important;
   -webkit-text-fill-color: #0F172A !important;
-  font-size: 14px !important;
+  font-size: 15.5px !important;
   font-weight: 600 !important;
-  border-left: 4px solid transparent !important;
   border-bottom: 1px solid #E2E8F0 !important;
   padding-top: 12px !important;
   padding-bottom: 12px !important;
@@ -852,37 +873,58 @@ div[data-testid="stNumberInput"] > div {
 /* Form section cards spacing */
 .form-grid-gap { margin-bottom: 4px; }
 .bmi-live {
-  margin-top: 6px; padding: 8px 10px; border-radius: 8px;
+  margin-top: 6px; padding: 10px 12px; border-radius: 10px;
   background: #EFF6FF; border: 1px solid #BFDBFE;
-  color: #1E3A8A; font-size: 12px; font-weight: 600;
+  color: #1E3A8A; font-size: 13.5px; font-weight: 600;
+  box-shadow: var(--shadow-card);
 }
 .summary-card {
   background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
-  border: 1px solid var(--border-strong); border-radius: 12px;
-  padding: 12px 14px; margin: 0 0 8px 0; box-shadow: none;
+  border: 1px solid var(--border-strong); border-radius: 16px;
+  padding: 16px 18px; margin: 0 0 8px 0; box-shadow: var(--shadow-card);
 }
 .summary-card h3 {
-  margin: 0 0 4px 0; font-size: 14px; font-weight: 800; color: var(--navy);
+  margin: 0 0 4px 0; font-size: 16px; font-weight: 800; color: var(--navy);
+  padding-left: 10px; border-left: 3px solid var(--blue);
 }
-.summary-card .cap { font-size: 11px; color: var(--muted); margin-bottom: 10px; }
+.summary-card .cap { font-size: 12.5px; color: var(--muted); margin-bottom: 10px; font-weight: 500; }
 .summary-grid {
   display: grid; grid-template-columns: 1fr; gap: 8px;
 }
 .summary-cell {
-  background: #FFFFFF; border: 1px solid var(--border-strong); border-radius: 10px;
-  padding: 10px 12px;
+  background: #FFFFFF; border: 1px solid var(--border-strong); border-radius: 12px;
+  padding: 12px 14px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
 }
-.summary-cell .lbl { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
-.summary-cell .val { margin-top: 4px; font-size: 16px; font-weight: 800; color: var(--navy); }
-.summary-cell .sub { margin-top: 3px; font-size: 11px; color: var(--muted); line-height: 1.35; }
+.summary-cell .lbl { font-size: 11.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.summary-cell .val { margin-top: 4px; font-size: 17.5px; font-weight: 800; color: var(--navy); }
+.summary-cell .sub { margin-top: 3px; font-size: 12.5px; color: var(--muted); line-height: 1.35; }
 
-label, .stSelectbox label, .stNumberInput label, .stTextInput label, .stTextArea label,
-[data-testid="stWidgetLabel"] p {
-  font-size: 13px !important; font-weight: 700 !important; color: #0F172A !important;
+/* Main-area labels / helper text — ~15% larger, sidebar unchanged */
+section.main label,
+section.main .stSelectbox label,
+section.main .stNumberInput label,
+section.main .stTextInput label,
+section.main .stTextArea label,
+section.main [data-testid="stWidgetLabel"] p,
+section.main [data-testid="stWidgetLabel"] label {
+  font-size: 14.5px !important;
+  font-weight: 700 !important;
+  color: #0F172A !important;
+  letter-spacing: -0.01em !important;
 }
-
-/* Checkbox readable */
-.stCheckbox label p { color: #0F172A !important; font-weight: 600 !important; }
+section.main .stCaption,
+section.main [data-testid="stCaptionContainer"],
+section.main [data-testid="stCaptionContainer"] p {
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+  color: #64748B !important;
+}
+section.main .stCheckbox label p {
+  color: #0F172A !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+}
 .stCheckbox [data-baseweb="checkbox"] {
   border: 1px solid var(--border-strong) !important;
   border-color: var(--border-strong) !important;
@@ -890,15 +932,15 @@ label, .stSelectbox label, .stNumberInput label, .stTextInput label, .stTextArea
 }
 
 div[data-testid="stExpander"] {
-  background: var(--card); border: 1px solid var(--border-strong); border-radius: 14px;
-  margin-bottom: 10px; box-shadow: none;
+  background: var(--card); border: 1px solid var(--border-strong); border-radius: 16px;
+  margin-bottom: 10px; box-shadow: var(--shadow-card);
 }
 
 .stButton > button {
-  border-radius: 10px !important; font-weight: 700 !important; font-size: 14px !important;
-  min-height: 40px !important; border: 1px solid var(--border-strong) !important;
+  border-radius: 12px !important; font-weight: 700 !important; font-size: 15px !important;
+  min-height: 42px !important; border: 1px solid var(--border-strong) !important;
   background: #FFFFFF !important; color: var(--navy) !important;
-  box-shadow: none !important;
+  box-shadow: var(--shadow-card) !important;
 }
 .stButton > button[kind="primary"] {
   background: linear-gradient(135deg, #1D4ED8, #2563EB) !important;
@@ -909,8 +951,8 @@ div[data-testid="stExpander"] {
   filter: brightness(1.05);
 }
 
-div[data-testid="stMetricValue"] { font-size: 26px !important; color: var(--navy) !important; font-weight: 800 !important; }
-div[data-testid="stMetricLabel"] { font-size: 12px !important; color: var(--muted) !important; font-weight: 600 !important; }
+div[data-testid="stMetricValue"] { font-size: 28px !important; color: var(--navy) !important; font-weight: 800 !important; }
+div[data-testid="stMetricLabel"] { font-size: 13.5px !important; color: var(--muted) !important; font-weight: 600 !important; }
 
 [data-testid="stMetric"] {
   background: #FFFFFF !important;
@@ -923,7 +965,7 @@ div[data-testid="stMetricLabel"] { font-size: 12px !important; color: var(--mute
   gap: 8px; background: transparent; border-bottom: 1px solid var(--border-strong);
 }
 .stTabs [data-baseweb="tab"] {
-  font-size: 13px; font-weight: 650; color: var(--muted);
+  font-size: 14.5px; font-weight: 650; color: var(--muted);
   padding: 10px 14px; border-radius: 10px 10px 0 0;
   border: 1px solid transparent;
 }
@@ -1007,14 +1049,14 @@ section[data-testid="stSidebar"] div[data-testid="stExpander"] {
   background: rgba(15, 23, 42, 0.45) !important;
 }
 
-/* Bordered section containers — wrap heading + all related inputs */
+/* Bordered section containers — premium card polish (main only) */
 div[data-testid="stVerticalBlockBorderWrapper"] {
   background: #FFFFFF !important;
   border: 1px solid var(--border-strong) !important;
-  border-radius: 12px !important;
-  padding: 10px 12px 12px 12px !important;
+  border-radius: 16px !important;
+  padding: 16px 18px 18px 18px !important;
   margin-bottom: 0 !important;
-  box-shadow: none !important;
+  box-shadow: var(--shadow-card) !important;
   overflow: visible !important;
 }
 /* Sidebar must stay dark — override the white card wrapper above */
@@ -1039,7 +1081,7 @@ div[data-testid="stVerticalBlockBorderWrapper"] div[data-baseweb="input"] {
   border-right: 1px solid #94A3B8 !important;
   border-bottom: 1px solid #94A3B8 !important;
   border-left: 1px solid #94A3B8 !important;
-  border-radius: 12px !important;
+  border-radius: 14px !important;
   background: #FFFFFF !important;
 }
 div[data-testid="stVerticalBlockBorderWrapper"] .stTextInput input,
@@ -1050,8 +1092,9 @@ div[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stTextInput"] inpu
   border-width: 1px !important;
   border-color: #94A3B8 !important;
   border-bottom: 1px solid #94A3B8 !important;
-  border-radius: 12px !important;
+  border-radius: 14px !important;
   box-shadow: inset 0 0 0 1px #94A3B8 !important;
+  font-size: 15.5px !important;
 }
 div[data-testid="stVerticalBlockBorderWrapper"] div[data-baseweb="input"] input {
   border: none !important;
@@ -1063,7 +1106,7 @@ div[data-testid="stVerticalBlockBorderWrapper"] .stSelectbox div[data-baseweb="s
 div[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stSelectbox"] div[data-baseweb="select"] > div {
   border: 1px solid rgba(255, 255, 255, 0.35) !important;
   outline: 1px solid rgba(15, 23, 42, 0.14) !important;
-  border-radius: 12px !important;
+  border-radius: 14px !important;
 }
 
 /* Main-area radios only — do not wipe sidebar nav styling */
