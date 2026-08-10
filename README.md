@@ -9,7 +9,7 @@
 
 | | Link |
 |---|---|
-| **Live Streamlit app** | [https://audrey2023uh-audrey-healthcareai-app-6w8imm.streamlit.app/](https://audrey2023uh-audrey-healthcareai-app-6w8imm.streamlit.app/) |
+| **Live Streamlit app** | [https://audrey2023uh-audrey-healthcareai-app-6w8imm.streamlit.app/](https://audrey2023uh-audrey-healthcareai-app-6w8imm.streamlit.app) |
 | **GitHub repository** | [https://github.com/Audrey2023uh/Audrey_HealthCareAI](https://github.com/Audrey2023uh/Audrey_HealthCareAI) |
 
 > Latest UI polish is on `main`. Open the live app link above (hard-refresh after Streamlit finishes redeploying). The URL does not change when you push updates.
