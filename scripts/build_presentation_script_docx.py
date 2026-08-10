@@ -405,7 +405,7 @@ Evaluation is produced by scripts/evaluate.py into outputs/eval_results.json. Th
 
 Citation precision on the demo eval set: 1.00 — valid [n] citations over total citations.
 
-Chunks per query: 5 after priority re-rank top-k.
+Chunks: configured top-k = 5 (demo eval returned 4, 4, and 5 — not a constant measured result).
 
 Indexed corpus: 19 documents / 20 chunks.
 

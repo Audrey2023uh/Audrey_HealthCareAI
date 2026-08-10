@@ -1053,7 +1053,7 @@ def build():
     )
     metrics = [
         ("Citation precision", "1.00", "Valid [n] / total cites\n(demo eval set)"),
-        ("Chunks / query", "5", "Top-k after\npriority rerank"),
+        ("Configured top-k", "5", "Default window\n(not always returned)"),
         ("Indexed corpus", "19 / 20", "Documents / chunks\nin FAISS"),
         ("Retrieval path", "FAISS", "TF-IDF · hierarchy\nrerank"),
     ]
