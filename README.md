@@ -50,12 +50,15 @@ Built an **end-to-end, source-linked clinical evidence assistant** that takes a 
 ## Quick start
 
 ```powershell
-cd "C:\Users\audre\OneDrive\1- Final project\AI HEALTH CARE"
+git clone https://github.com/Audrey2023uh/Audrey_HealthCareAI.git
+cd Audrey_HealthCareAI
 python -m pip install -r requirements.txt
 python scripts\build_index.py
 python scripts\run_demo.py --ask "What A1C target is commonly used for nonpregnant adults with type 2 diabetes?"
 streamlit run app.py
 ```
+
+On macOS/Linux, use `python scripts/build_index.py` (forward slashes).
 
 Optional API:
 
@@ -63,21 +66,43 @@ Optional API:
 uvicorn api.main:app --reload --app-dir .
 ```
 
-Optional LLM (copy `.env.example` → `.env` and set `OPENAI_API_KEY`). Without a key, the system still runs using **retrieved chunks + extractive summary**.
+### Optional LLM configuration
+
+Copy `.env.example` → `.env` (never commit `.env`).
+
+**Preferred (matches Streamlit Secrets and `src/config.py`):**
+
+```env
+OPENROUTER_API_KEY=your-openrouter-key
+OPENROUTER_MODEL=openrouter/free
+```
+
+**Legacy aliases also accepted:** `OPENAI_API_KEY`, `OPENAI_BASE_URL`, `OPENAI_MODEL`.
+
+Without a real API key, the system still runs using **retrieved chunks + extractive summary** (offline fallback).
+
+Optional retrieval window (default shown in the UI sidebar):
+
+```env
+TOP_K=5
+```
+
+`TOP_K` is the **configured** retrieval window after priority re-ranking. Actual returned chunk counts can be lower when weak matches are filtered (demo eval set returned **4, 4, and 5** chunks across three queries).
 
 ---
 
 ## Clinical Decision Support (CDSS) workflow (implemented)
 
-The LangGraph pipeline now runs a **7-step CDSS** loop:
+The implemented LangGraph `StateGraph` in `src/graph.py` has **8 nodes** (entry = Knowledge Update):
 
-1. **Patient Assessment** — age, sex, BP, diabetes, LDL, BMI, smoking, ASCVD, other CV risks (form + text extraction)  
-2. **Clinical Risk Analysis** — risk factors, obesity, hypertension stage, diabetes risk, preventive needs  
-3. **Evidence Retrieval** — priority hierarchy (guidelines → … → MedQuAD), prefer active guideline versions  
-4. **Evidence Verification** — cross-source agreement/conflict flags  
-5. **Clinical Recommendation** — lifestyle, medication, screening, follow-up, preventive strategies  
-6. **Evidence Summary** — guideline name, organization, year, evidence level, citation per recommendation  
-7. **Transparency** — confidence, sources consulted, hierarchy, agent trace  
+1. **Knowledge Update** — optional URL probes / local supersession (skipped unless requested)  
+2. **Patient Assessment** — age, sex, BP, diabetes, LDL, BMI, smoking, ASCVD, other CV risks (form + text extraction)  
+3. **Clinical Risk Analysis** — risk factors, obesity, hypertension stage, diabetes risk, preventive needs  
+4. **Query Agent** — normalize / classify query; optional LLM rewrite for search  
+5. **Evidence Retrieval** — FAISS + Priority 1–7 ranking; prefer active guideline versions  
+6. **Evidence Verification** — cross-source agreement/conflict flags, grounded draft, confidence / review flag  
+7. **Recommendation + Evidence Summary** — structured recommendations with citations  
+8. **Transparency** — confidence, sources consulted, hierarchy, agent trace, final narrative  
 
 Supports clinicians; **does not replace** clinical judgment.
 
@@ -109,12 +134,16 @@ Semantic similarity is only a secondary signal. Superseded guidelines are heavil
 ```
 User
  → Streamlit UI (app.py)
- → LangGraph Orchestrator (src/graph.py)
- → Query Agent          # clean / classify / optional rewrite
- → Retrieval Agent      # FAISS top-k semantic search
- → Summary Agent        # LLM or extractive grounded answer
- → Verification Agent   # citation checks + confidence + review flag
- → Final Answer with Citations
+ → LangGraph StateGraph (src/graph.py) — 8 nodes
+ → knowledge_update_agent
+ → patient_assessment_agent
+ → risk_analysis_agent
+ → query_agent
+ → retrieval_agent          # FAISS + Priority 1–7 re-rank
+ → verification_agent       # conflicts, citations, confidence
+ → recommendation_agent     # structured recs + evidence summary
+ → transparency_agent       # agent_trace + final narrative
+ → Final answer with citations
 ```
 
 **Proof of implementation:** enter a question in Streamlit → see retrieved chunks, citations, agent trace, confidence, and latency metrics.
@@ -127,13 +156,13 @@ User
 |-----------|--------|
 | Language | Python 3 |
 | UI | Streamlit |
-| Orchestration | LangGraph `StateGraph` |
+| Orchestration | LangGraph `StateGraph` (8 nodes) |
 | RAG / vectors | FAISS (`IndexFlatIP`) + chunk metadata JSON |
 | Embeddings (default) | scikit-learn **TF-IDF** (offline, deterministic) |
 | Embeddings (optional) | OpenAI-compatible embedding API |
-| LLM (optional) | OpenAI / OpenRouter / Ollama via `OPENAI_BASE_URL` |
+| LLM (optional) | OpenRouter / OpenAI-compatible chat via `OPENROUTER_API_KEY` (aliases: `OPENAI_*`) |
 | LLM (fallback) | Extractive answer from retrieved chunks |
-| API (optional) | FastAPI (`api/main.py`) |
+| API (optional) | FastAPI (`api/main.py`) + Uvicorn |
 | Data | Curated public-style seed KB + optional live PubMed E-utilities |
 
 ---
@@ -158,14 +187,18 @@ User
 
 ---
 
-## Multi-agent responsibilities
+## LangGraph nodes (implemented)
 
-| Agent | Responsibility |
-|-------|----------------|
+| Node | Responsibility |
+|------|----------------|
+| **Knowledge Update** | Optional URL status / Last-Modified / ETag probes; local supersession; optional index rebuild |
+| **Patient Assessment** | Merge form + text-extracted patient fields |
+| **Risk Analysis** | Prototype risk factors, HTN stage, obesity, preventive needs |
 | **Query Agent** | Normalize question, light clinical typing, optional LLM rewrite for search |
-| **Retrieval Agent** | Vector search, top-k, build evidence context block |
-| **Summary Agent** | Grounded answer with `[n]` citations (LLM or extractive) |
-| **Verification Agent** | Check citation indices, retrieval scores, confidence, human-review flag |
+| **Retrieval Agent** | FAISS candidate search, Priority 1–7 re-rank, build evidence context (`TOP_K` configured window) |
+| **Verification Agent** | Conflict checks, grounded draft (LLM or extractive), citation checks, confidence, human-review flag |
+| **Recommendation Agent** | Structured clinical recommendations + evidence summary / citations |
+| **Transparency Agent** | Confidence, sources, hierarchy, agent trace, final clinician-facing narrative |
 
 ---
 
@@ -173,7 +206,7 @@ User
 
 - Retrieved documents / chunks with scores  
 - Citation list with URLs  
-- Confidence score (heuristic ± optional LLM verdict)  
+- Confidence score (heuristic)  
 - Agent trace  
 - Explicit “insufficient evidence / human review” when unsupported  
 
@@ -190,10 +223,12 @@ python scripts\evaluate.py
 Writes `outputs/eval_results.json` with:
 
 - retrieval / response latency  
-- number of retrieved chunks  
+- number of retrieved chunks (can vary; configured `TOP_K` default is 5)  
 - citation precision (valid `[n]` vs hit list)  
 - groundedness notes  
 - qualitative RAG vs plain-LLM comparison note  
+
+On the checked-in demo eval set: **citation precision = 1.00**; retrieved chunk counts were **4, 4, and 5**; indexed corpus is **19 documents / 20 chunks** (`indexes/meta.json`).
 
 ---
 
@@ -202,11 +237,11 @@ Writes `outputs/eval_results.json` with:
 ### Implemented (works in this repo)
 
 - Streamlit demo UI  
-- LangGraph 4-agent pipeline  
+- LangGraph **8-node** CDSS `StateGraph`  
 - FAISS RAG with citations  
 - Seed medical KB ingestion  
 - Offline TF-IDF path  
-- Optional OpenAI-compatible LLM  
+- Optional OpenAI-compatible / OpenRouter LLM  
 - Optional FastAPI `/ask`  
 - Optional PubMed abstract fetch helper  
 - Evaluation script  
@@ -256,16 +291,18 @@ CLI alternative:
 python scripts\run_demo.py --ask "When should adults be screened for hypertension according to USPSTF?" --compare-plain
 ```
 
+Windows shortcut: double-click `START_DEMO.bat` (installs deps, builds index, launches Streamlit).
+
 ---
 
 ## Project layout
 
 ```
-AI HEALTH CARE/
+Audrey_HealthCareAI/
   app.py                 # Streamlit UI
   api/main.py            # Optional FastAPI
   data/seed_medical_kb.json
-  indexes/               # FAISS + chunks (generated)
+  indexes/               # FAISS + chunks (generated / checked in)
   scripts/build_index.py
   scripts/run_demo.py
   scripts/evaluate.py
@@ -274,10 +311,11 @@ AI HEALTH CARE/
   src/embeddings.py
   src/vectorstore.py
   src/llm.py
-  src/graph.py           # LangGraph agents
+  src/graph.py           # LangGraph 8-node StateGraph
   requirements.txt
   .env.example
   README.md
+  Milestone2_HealthcareAI_V2.pptx
 ```
 
 ---

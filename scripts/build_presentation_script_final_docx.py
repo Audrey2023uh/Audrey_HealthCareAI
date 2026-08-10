@@ -642,7 +642,7 @@ def build():
     )
     para(
         doc,
-        "Chunks per query at five after priority re-rank shows the system is retrieving a usable evidence set rather than returning empty context. "
+        "Configured top-k equals five as the default retrieval window; the demo eval set returned four, four, and five chunks, so five is not a constant measured result. "
         "Corpus size — 19 documents, 20 chunks — keeps expectations honest: this is a controlled prototype corpus, not a claim of indexing all of PubMed.",
     )
     para(
