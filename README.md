@@ -14,6 +14,7 @@
 | **Live Streamlit App** | [Open App](https://audrey2023uh-audrey-healthcareai-app-6w8imm.streamlit.app/) |
 | **App Demo Video** | [Watch App Demo](https://drive.google.com/file/d/18PZ_HnAR45yRx9eUFE1AaSFKQB5AvJyU/view?usp=sharing) |
 | **GitHub Walkthrough Video** | [Watch GitHub Walkthrough](https://drive.google.com/file/d/1oGWAk1k6g8HcmqD-Z79viZcAxNRqzTAn/view?usp=sharing) |
+| **Presentation Slides** | [View / Download PowerPoint](https://github.com/Audrey2023uh/Audrey_HealthCareAI/blob/main/Milestone2_Powerpoint/Milestone2_HealthcareAI.pptx) |
 | **GitHub Repository** | [Audrey_HealthCareAI](https://github.com/Audrey2023uh/Audrey_HealthCareAI) |
 
 The app is **deployed online on Streamlit Cloud** for demonstration and access. The core RAG pipeline also supports a **local/offline fallback** (TF-IDF + FAISS + extractive generation) when an LLM/API is unavailable. Optional online LLM and live-source features require network/API access.
