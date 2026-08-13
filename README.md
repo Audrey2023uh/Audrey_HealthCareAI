@@ -5,15 +5,17 @@
 
 > Research / education prototype only. **Not a medical device.** A licensed clinician makes the final decision.
 
-## Live demo
+## Live Demo & Videos
 
-| | Link |
+| Resource | Link |
 |---|---|
-| **Live Streamlit app** | [https://audrey2023uh-audrey-healthcareai-app-6w8imm.streamlit.app/](https://audrey2023uh-audrey-healthcareai-app-6w8imm.streamlit.app) |
-| **GitHub repository** | [https://github.com/Audrey2023uh/Audrey_HealthCareAI](https://github.com/Audrey2023uh/Audrey_HealthCareAI) |
+| **Live Streamlit App** | [Open App](https://audrey2023uh-audrey-healthcareai-app-6w8imm.streamlit.app/) |
+| **App Demo Video** | [Watch App Demo](https://drive.google.com/file/d/18PZ_HnAR45yRx9eUFE1AaSFKQB5AvJyU/view?usp=sharing) |
+| **GitHub Walkthrough Video** | [Watch GitHub Walkthrough](https://drive.google.com/file/d/1oGWAk1k6g8HcmqD-Z79viZcAxNRqzTAn/view?usp=sharing) |
+| **GitHub Repository** | [Audrey_HealthCareAI](https://github.com/Audrey2023uh/Audrey_HealthCareAI) |
 
-> Latest UI polish is on `main`. Open the live app link above (hard-refresh after Streamlit finishes redeploying). The URL does not change when you push updates.
-
+> The core prototype supports local/offline operation using TF-IDF, FAISS, and an extractive fallback.  
+> The Streamlit app is also deployed online for easier demonstration and access.
 ### Streamlit Cloud API keys (required for LLM mode)
 
 **Where to paste secrets (never commit keys to GitHub):**
