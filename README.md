@@ -1,7 +1,9 @@
 # Healthcare AI — Source-Linked Evidence-Based Clinical Decision Support
 
-**Milestone 2 engineering prototype** (university course project)  
-**Theme:** LLMs · RAG · Agentic AI · End-to-end application · Rapid prototyping
+**By Audrey Rah**
+
+**Milestone 2 Engineering Prototype** — University Course Project  
+**Theme:** LLMs · RAG · Agentic AI · End-to-End Application · Rapid Prototyping
 
 > Research / education prototype only. **Not a medical device.** A licensed clinician makes the final decision.
 
